@@ -247,13 +247,13 @@ function draw()
 	noFill();
 	stroke(139, 69, 19);
 	strokeWeight(7);
-	line(gameChar_x, gameChar_y - 50, 
+	line(gameChar_x + 2, gameChar_y - 50, 
 		gameChar_x - 15, gameChar_y - 45);	
 	line(gameChar_x - 15, gameChar_y - 45, 
 		gameChar_x - 25, gameChar_y - 80);
 	fill(255);
 	stroke(0);
-	strokeWeight(0.1);
+	strokeWeight(1);
 	ellipse(gameChar_x - 25, gameChar_y - 87, 4, 8);
 	ellipse(gameChar_x - 20, gameChar_y - 85, 4, 8);
 	ellipse(gameChar_x - 30, gameChar_y - 85, 4, 8);
