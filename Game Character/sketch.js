@@ -90,8 +90,10 @@ function draw()
 	noFill();
 	stroke(139, 69, 19);
 	strokeWeight(7);
-	curve(gameChar_x + 100, gameChar_x, gameChar_x, gameChar_y - 50, 
-		gameChar_x - 25, gameChar_y - 80, gameChar_x, gameChar_x);
+	line(gameChar_x, gameChar_y - 50, 
+		gameChar_x - 15, gameChar_y - 45);	
+	line(gameChar_x - 15, gameChar_y - 45, 
+		gameChar_x - 25, gameChar_y - 80);
 	fill(255);
 	stroke(0);
 	strokeWeight(0.1);
@@ -166,8 +168,10 @@ function draw()
 	noFill();
 	stroke(139, 69, 19);
 	strokeWeight(7);
-	curve(gameChar_x + 100, gameChar_x, gameChar_x, gameChar_y - 50, 
-		gameChar_x - 25, gameChar_y - 80, gameChar_x, gameChar_x);
+	line(gameChar_x, gameChar_y - 50, 
+		gameChar_x - 15, gameChar_y - 45);	
+	line(gameChar_x - 15, gameChar_y - 45, 
+		gameChar_x - 25, gameChar_y - 80);
 	fill(255);
 	stroke(0);
 	strokeWeight(0.1);
@@ -243,8 +247,10 @@ function draw()
 	noFill();
 	stroke(139, 69, 19);
 	strokeWeight(7);
-	curve(gameChar_x + 100, gameChar_x, gameChar_x, gameChar_y - 50, 
-		gameChar_x - 25, gameChar_y - 80, gameChar_x, gameChar_x);
+	line(gameChar_x, gameChar_y - 50, 
+		gameChar_x - 15, gameChar_y - 45);	
+	line(gameChar_x - 15, gameChar_y - 45, 
+		gameChar_x - 25, gameChar_y - 80);
 	fill(255);
 	stroke(0);
 	strokeWeight(0.1);
@@ -254,10 +260,10 @@ function draw()
 	ellipse(gameChar_x - 25, gameChar_y - 80, 15, 10);
 
 	//Walking, turned right
-	stroke(100);
-	noFill();
-	rect(220, 260, 50, 80);
-	noStroke();
+	// stroke(100);
+	// noFill();
+	// rect(220, 260, 50, 80);
+	// noStroke();
 	fill(0);
 	text("4. Walking right", 220, 360);
 
@@ -317,8 +323,11 @@ function draw()
 	noFill();
 	stroke(139, 69, 19);
 	strokeWeight(7);
-	curve(gameChar_x + 100, gameChar_x, gameChar_x, gameChar_y - 50, 
-		gameChar_x - 25, gameChar_y - 80, gameChar_x, gameChar_x);
+	line(gameChar_x, gameChar_y - 50, 
+		gameChar_x - 15, gameChar_y - 45);	
+	line(gameChar_x - 15, gameChar_y - 45, 
+		gameChar_x - 25, gameChar_y - 80);	
+	
 	fill(255);
 	stroke(0);
 	strokeWeight(0.1);
@@ -328,10 +337,10 @@ function draw()
 	ellipse(gameChar_x - 25, gameChar_y - 80, 15, 10);
 
 	//Jumping right
-	stroke(100);
-	noFill();
-	rect(20, 460, 50, 80);
-	noStroke();
+	// stroke(100);
+	// noFill();
+	// rect(20, 460, 50, 80);
+	// noStroke();
 	fill(0);
 	text("5. Jumping to the right", 20, 560);
 
@@ -391,8 +400,10 @@ function draw()
 	noFill();
 	stroke(139, 69, 19);
 	strokeWeight(7);
-	curve(gameChar_x + 100, gameChar_x, gameChar_x, gameChar_y - 50, 
-		gameChar_x - 25, gameChar_y - 80, gameChar_x, gameChar_x);
+	line(gameChar_x, gameChar_y - 50, 
+		gameChar_x - 15, gameChar_y - 45);	
+	line(gameChar_x - 15, gameChar_y - 45, 
+		gameChar_x - 25, gameChar_y - 80);
 	fill(255);
 	stroke(0);
 	strokeWeight(0.1);
@@ -402,10 +413,10 @@ function draw()
 	ellipse(gameChar_x - 25, gameChar_y - 80, 15, 10);
 
 	//Jumping to the left
-	stroke(100);
-	noFill();
-	rect(220, 460, 50, 80);
-	noStroke();
+	// stroke(100);
+	// noFill();
+	// rect(220, 460, 50, 80);
+	// noStroke();
 	fill(0);
 	text("6. Jumping to the left", 220, 560);
 
@@ -465,8 +476,10 @@ function draw()
 	noFill();
 	stroke(139, 69, 19);
 	strokeWeight(7);
-	curve(gameChar_x + 100, gameChar_x, gameChar_x, gameChar_y - 50, 
-		gameChar_x - 25, gameChar_y - 80, gameChar_x, gameChar_x);
+	line(gameChar_x, gameChar_y - 50, 
+		gameChar_x - 15, gameChar_y - 45);	
+	line(gameChar_x - 15, gameChar_y - 45, 
+		gameChar_x - 25, gameChar_y - 80);
 	fill(255);
 	stroke(0);
 	strokeWeight(0.1);
