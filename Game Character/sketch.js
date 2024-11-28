@@ -106,7 +106,7 @@ function draw()
 	/**2.Jumping facing forwards
 	 * 
 	 * 
-	 * /
+	 * */
 	// stroke(100);
 	// noFill();
 	// rect(220, 60, 50, 80);
