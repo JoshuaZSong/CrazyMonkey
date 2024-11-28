@@ -210,8 +210,6 @@ function draw()
 	line(gameChar_x + 70, gameChar_y - 10, gameChar_x + 60, gameChar_y + 10);//left arm 
 	line(gameChar_x + 75, gameChar_y - 30, gameChar_x + 94, gameChar_y - 15);//right leg
 	line(gameChar_x + 94, gameChar_y - 15, gameChar_x + 85, gameChar_y + 10);//right leg
-	// line(gameChar_x + 4, gameChar_y - 30, gameChar_x - 15, gameChar_y - 15);//right leg
-	// line(gameChar_x - 15, gameChar_y - 15, gameChar_x - 10, gameChar_y + 10);//right leg    
 	line(gameChar_x + 30, gameChar_y - 10, gameChar_x + 35, gameChar_y + 10);//left leg 
 
 	// face
@@ -486,5 +484,8 @@ function draw()
 	fill(255);
 	stroke(0);
 	strokeWeight(1);
+	ellipse(gameChar_x - 5, gameChar_y - 13, 4, 8);
+	ellipse(gameChar_x , gameChar_y - 15, 4, 8);
+	ellipse(gameChar_x - 10, gameChar_y - 15, 4, 8);
 	ellipse(gameChar_x + 105, gameChar_y - 20, 15, 10);
 }
