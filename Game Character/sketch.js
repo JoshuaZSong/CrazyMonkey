@@ -24,7 +24,7 @@ function draw()
 {
 	background(255);
 
-	//Standing, facing frontwards
+	//1.Standing, facing frontwards
 
 	// stroke(100);
 	// noFill();
@@ -103,7 +103,10 @@ function draw()
 
 
 
-	//Jumping facing forwards
+	/**2.Jumping facing forwards
+	 * 
+	 * 
+	 * /
 	// stroke(100);
 	// noFill();
 	// rect(220, 60, 50, 80);
@@ -171,7 +174,7 @@ function draw()
 	strokeWeight(0.1);
 	ellipse(gameChar_x - 5, gameChar_y - 20, 15, 10);
 
-	/**Walking, turned left
+	/**3.Walking, turned left
 	 * 
 	 * 
 	 * */
@@ -256,7 +259,7 @@ function draw()
 
 
 
-	//Walking, turned right
+	//4.Walking, turned right
 	// stroke(100);
 	// noFill();
 	// rect(220, 260, 50, 80);
@@ -333,7 +336,7 @@ function draw()
 	ellipse(gameChar_x - 30, gameChar_y - 85, 4, 8);
 	ellipse(gameChar_x - 25, gameChar_y - 80, 15, 10);
 
-	//Jumping right
+	//5.Jumping right
 	// stroke(100);
 	// noFill();
 	// rect(20, 460, 50, 80);
@@ -403,7 +406,7 @@ function draw()
 	strokeWeight(0.1);
 	ellipse(gameChar_x - 5, gameChar_y - 20, 15, 10);
 
-	//Jumping to the left
+	//6.Jumping to the left
 	// stroke(100);
 	// noFill();
 	// rect(220, 460, 50, 80);
