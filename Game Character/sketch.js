@@ -171,8 +171,16 @@ function draw()
 	
 	fill(255);
 	stroke(0);
-	strokeWeight(0.1);
+	strokeWeight(1);
+	ellipse(gameChar_x - 5, gameChar_y - 13, 4, 8);
+	ellipse(gameChar_x , gameChar_y - 15, 4, 8);
+	ellipse(gameChar_x - 10, gameChar_y - 15, 4, 8);
 	ellipse(gameChar_x - 5, gameChar_y - 20, 15, 10);
+	// ellipse(gameChar_x + 105, gameChar_y - 87, 4, 8);
+	// ellipse(gameChar_x + 110, gameChar_y - 85, 4, 8);
+	// ellipse(gameChar_x + 100, gameChar_y - 85, 4, 8);
+	// ellipse(gameChar_x + 105, gameChar_y - 80, 15, 10);
+
 
 	/**3.Walking, turned left
 	 * 
