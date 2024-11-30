@@ -262,7 +262,9 @@ function draw()
 
 
 	//4.Walking, turned right
-	// stroke(100);
+	// stroke(100);12345
+	hahaha
+	
 	// noFill();
 	// rect(220, 260, 50, 80);
 	// noStroke();
