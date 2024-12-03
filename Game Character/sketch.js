@@ -10,6 +10,8 @@ point to draw the different states of your game character.
 Write the code so that your character appears inside the box for each
 state.
 
+I am so sorry
+I don't have time to push code today
 */
 
 var gameChar_x = 0;
@@ -263,8 +265,6 @@ function draw()
 
 	//4.Walking, turned right
 	// stroke(100);12345
-	hahaha
-	
 	// noFill();
 	// rect(220, 260, 50, 80);
 	// noStroke();
