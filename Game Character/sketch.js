@@ -12,6 +12,7 @@ state.
 
 I am so sorry
 I don't have time to push code today
+I was busy taking the Google IT support courses
 */
 
 var gameChar_x = 0;
