@@ -447,7 +447,7 @@ function draw() {
 	} else if (isRight == true) {
 		gameChar_x += 5;
 	} else if (isPlummeting == true) {
-		gameChar_y -= 50;
+		gameChar_y -= 10;
 	}
 
 	//add gravity
@@ -477,7 +477,10 @@ function keyPressed() {
 	} else if ((keyCode == 38 || keyCode == 32) && isFalling == false) {
 		console.log("up arrow");
 		isPlummeting = true;
-	} 
+		isFalling == true;
+	} else if(isFalling == true){
+		console.log("double jumps is prevented" )
+	}
 
 }
 
