@@ -16,6 +16,7 @@ var isLeft = false;
 var isRight = false;
 var isFalling = false;
 var isPlummeting = false;
+var jumpHeight = 100;
 
 
 function setup() {
@@ -447,16 +448,21 @@ function draw() {
 	} else if (isRight == true) {
 		gameChar_x += 5;
 	} else if (isPlummeting == true) {
-		gameChar_y -= 10;
+		gameChar_y -= jumpHeight;
 	}
 
 	//add gravity
-	if(gameChar_y < floorPos_y ){
+	if(gameChar_y < floorPos_y){
 		isFalling = true
-		gameChar_y += 5;
+		gameChar_y += 4;
 	} else{
 		isFalling = false;
 	}
+	
+	if(gameChar_y < (floorPos_y - jumpHeight)){
+		isPlummeting = false;
+	} 
+
 }
 
 
