@@ -477,7 +477,6 @@ function keyPressed() {
 	} else if ((keyCode == 38 || keyCode == 32) && isFalling == false) {
 		console.log("up arrow");
 		isPlummeting = true;
-		isFalling == true;
 	} else if(isFalling == true){
 		console.log("double jumps is prevented" )
 	}
