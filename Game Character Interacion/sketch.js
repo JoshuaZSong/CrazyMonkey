@@ -7,8 +7,10 @@ Game interaction
 
 //Background
 var floorPos_y;
+var mountain;
+var canyon;
 //Collectable
-var isFound = false;
+var Collectable;
 //Character
 var gameChar_x;
 var gameChar_y;
@@ -27,14 +29,15 @@ function setup() {
 	gameChar_y = floorPos_y;
 
 	mountain = {
-		x_pos: 500, 
-		y_pos: 250, 
+		x_pos: 500,
+		y_pos: 250,
 	}
 
 	collectable = {
-		x_pos: 125, 
-		y_pos: 380, 
-		size: 50
+		x_pos: width / 2,
+		y_pos: 350,
+		size: 50,
+		isFound: false
 	}
 
 
@@ -73,20 +76,26 @@ function draw() {
 	//draw the canyon
 
 	//draw collectable item 
-	noStroke();
-	fill(250,250,0);
-	ellipse(collectable.x_pos,collectable.y_pos,20,40);
-	fill(220,220,140);
-	ellipse(collectable.x_pos + 5 ,collectable.y_pos,10,20);
-
+	if(dist(gameChar_x + 40,gameChar_y - 50,collectable.x_pos,collectable.y_pos) < 45){
+		collectable.isFound = true;
+	}
+	//Collectable coin
+	if(!collectable.isFound){
+		noStroke();
+		fill(250, 250, 0);
+		ellipse(collectable.x_pos, collectable.y_pos, 20, 40);
+		fill(220, 220, 140);
+		ellipse(collectable.x_pos + 5, collectable.y_pos, 10, 20);
+	}
 
 	//the game character
 	if (isLeft && isFalling) {
 		// add your jumping-left code
+		// body
 		fill(139, 69, 19); // brown
 		stroke(0);
 		strokeWeight(3);
-		ellipse(gameChar_x + 50, gameChar_y - 60, 80, 80); //body
+		ellipse(gameChar_x + 40, gameChar_y - 50, 80, 80); //body
 
 		//arms and legs
 		strokeWeight(4);
