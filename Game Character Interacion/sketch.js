@@ -10,7 +10,7 @@ var floorPos_y;
 var mountain;
 var canyon;
 //Collectable
-var Collectable;
+var collectable;
 //Character
 var gameChar_x;
 var gameChar_y;
@@ -18,7 +18,9 @@ var isLeft = false;
 var isRight = false;
 var isFalling = false;
 var isPlummeting = false;
+var isJumping = false;
 var jumpHeight = 100;
+var isFrozen = false;
 
 
 
@@ -31,6 +33,12 @@ function setup() {
 	mountain = {
 		x_pos: 500,
 		y_pos: 250,
+	}
+
+	canyon = {
+		x_pos: width / 2 - 45,
+		y_pos: 432,
+		width: 100
 	}
 
 	collectable = {
@@ -74,13 +82,15 @@ function draw() {
 
 
 	//draw the canyon
+	fill(20);
+	rect(canyon.x_pos, canyon.y_pos, canyon.width, width - floorPos_y);
 
 	//draw collectable item 
-	if(dist(gameChar_x + 40,gameChar_y - 50,collectable.x_pos,collectable.y_pos) < 45){
+	if (dist(gameChar_x + 40, gameChar_y - 50, collectable.x_pos, collectable.y_pos) < 45) {
 		collectable.isFound = true;
 	}
 	//Collectable coin
-	if(!collectable.isFound){
+	if (!collectable.isFound) {
 		noStroke();
 		fill(250, 250, 0);
 		ellipse(collectable.x_pos, collectable.y_pos, 20, 40);
@@ -492,11 +502,11 @@ function draw() {
 
 	///////////INTERACTION CODE//////////
 	//Put conditional statements to move the game character below here
-	if (isLeft == true) {
+	if (isLeft == true && isFrozen == false) {
 		gameChar_x -= 5;
-	} else if (isRight == true) {
+	} else if (isRight == true && isFrozen == false) {
 		gameChar_x += 5;
-	} else if (isPlummeting == true) {
+	} else if (isJumping == true && isFrozen == false) {
 		gameChar_y -= jumpHeight;
 	}
 
@@ -504,14 +514,25 @@ function draw() {
 	if (gameChar_y < floorPos_y) {
 		isFalling = true
 		gameChar_y += 4;
-	} else {
+	} else if(gameChar_y == floorPos_y){
+		isPlummeting = false;
 		isFalling = false;
+	} else{
+		isPlummeting = false;
+		isFalling = true;
+		isFrozen = true;
 	}
 
 	if (gameChar_y < (floorPos_y - jumpHeight)) {
-		isPlummeting = false;
+		isJumping = false;
 	}
 
+	//falling into the canyon
+	if(gameChar_x + 30 > canyon.x_pos && gameChar_x + 60 < canyon.x_pos + canyon.width){
+		if(isPlummeting == false){
+			gameChar_y += 4;
+		}
+	}
 }
 
 
@@ -531,7 +552,7 @@ function keyPressed() {
 		isRight = true;
 	} else if ((keyCode == 38 || keyCode == 32) && isFalling == false) {
 		console.log("up arrow");
-		isPlummeting = true;
+		isJumping = true;
 	} else if (isFalling == true) {
 		console.log("double jumps is prevented")
 	}
@@ -552,7 +573,9 @@ function keyReleased() {
 		isRight = false;
 		console.log("isRight is " + isRight);
 	} else if (keyCode == 38 || keyCode == 32) {
+		isJumping = false;
 		isPlummeting = false;
+		console.log("isJumping is " + isJumping);
 		console.log("isPlummeting is " + isPlummeting);
 	}
 }
