@@ -12,10 +12,10 @@ Game interaction
 var gameChar_x;
 var gameChar_y;
 var floorPos_y;
-var isLeft;
-var isRight;
-var isFalling;
-var isPlummeting;
+var isLeft = false;
+var isRight = false;
+var isFalling = false;
+var isPlummeting = false;
 
 
 function setup() {
@@ -309,7 +309,7 @@ function draw() {
 		ellipse(gameChar_x - 25, gameChar_y - 80, 15, 10);
 
 	}
-	else if (isFalling || isPlummeting) {
+	else if (isPlummeting || isFalling) {
 		// add your jumping facing forwards code
 		fill(139, 69, 19); // brown
 		stroke(0);
@@ -442,13 +442,21 @@ function draw() {
 
 	///////////INTERACTION CODE//////////
 	//Put conditional statements to move the game character below here
-	if(isLeft == true){
-		gameChar_x -= 1;
-	}else if(isRight == true){
-		gameChar_x += 1;
+	if (isLeft == true) {
+		gameChar_x -= 5;
+	} else if (isRight == true) {
+		gameChar_x += 5;
+	} else if (isPlummeting == true) {
+		gameChar_y -= 50;
 	}
 
-
+	//add gravity
+	if(gameChar_y < floorPos_y ){
+		isFalling = true
+		gameChar_y += 5;
+	} else{
+		isFalling = false;
+	}
 }
 
 
@@ -466,8 +474,10 @@ function keyPressed() {
 	} else if (keyCode == 39) {
 		console.log("right arrow");
 		isRight = true;
-	}
-
+	} else if ((keyCode == 38 || keyCode == 32) && isFalling == false) {
+		console.log("up arrow");
+		isPlummeting = true;
+	} 
 
 }
 
@@ -480,7 +490,12 @@ function keyReleased() {
 
 	if (keyCode == 37) {
 		isLeft = false;
+		console.log("isLeft is " + isLeft);
 	} else if (keyCode == 39) {
 		isRight = false;
-	}
+		console.log("isRight is " + isRight);
+	} else if (keyCode == 38 || keyCode == 32) {
+		isPlummeting = false;
+		console.log("isPlummeting is " + isPlummeting);
+	} 
 }
