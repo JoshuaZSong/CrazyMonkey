@@ -1,17 +1,17 @@
 /*
-
+Author: Joshua Song
 The Game Project
-
 Week 3
-
 Game interaction
-
 */
 
-
+//Background
+var floorPos_y;
+//Collectable
+var isFound = false;
+//Character
 var gameChar_x;
 var gameChar_y;
-var floorPos_y;
 var isLeft = false;
 var isRight = false;
 var isFalling = false;
@@ -19,11 +19,25 @@ var isPlummeting = false;
 var jumpHeight = 100;
 
 
+
 function setup() {
 	createCanvas(1024, 576);
 	floorPos_y = height * 3 / 4;
-	gameChar_x = width / 2;
+	gameChar_x = width / 6;
 	gameChar_y = floorPos_y;
+
+	mountain = {
+		x_pos: 500, 
+		y_pos: 250, 
+	}
+
+	collectable = {
+		x_pos: 125, 
+		y_pos: 380, 
+		size: 50
+	}
+
+
 }
 
 function draw() {
@@ -37,7 +51,33 @@ function draw() {
 	fill(0, 155, 0);
 	rect(0, floorPos_y, width, height - floorPos_y); //draw some green ground
 
+	// a mountain in the distance
+	noStroke();
+	fill(100, 100, 30, 100);
+	triangle(
+		mountain.x_pos - 200, mountain.y_pos + 182,
+		mountain.x_pos, mountain.y_pos,
+		mountain.x_pos + 100, mountain.y_pos + 182);
+	fill(100, 100, 30, 100);
+	triangle(
+		mountain.x_pos, mountain.y_pos + 182,
+		mountain.x_pos + 200, mountain.y_pos,
+		mountain.x_pos + 330, mountain.y_pos + 182);
+	fill(100, 100, 30);
+	triangle(
+		mountain.x_pos - 150, mountain.y_pos + 182,
+		mountain.x_pos + 100, mountain.y_pos - 70,
+		mountain.x_pos + 300, mountain.y_pos + 182);
+
+
 	//draw the canyon
+
+	//draw collectable item 
+	noStroke();
+	fill(250,250,0);
+	ellipse(collectable.x_pos,collectable.y_pos,20,40);
+	fill(220,220,140);
+	ellipse(collectable.x_pos + 5 ,collectable.y_pos,10,20);
 
 
 	//the game character
@@ -452,16 +492,16 @@ function draw() {
 	}
 
 	//add gravity
-	if(gameChar_y < floorPos_y){
+	if (gameChar_y < floorPos_y) {
 		isFalling = true
 		gameChar_y += 4;
-	} else{
+	} else {
 		isFalling = false;
 	}
-	
-	if(gameChar_y < (floorPos_y - jumpHeight)){
+
+	if (gameChar_y < (floorPos_y - jumpHeight)) {
 		isPlummeting = false;
-	} 
+	}
 
 }
 
@@ -483,8 +523,8 @@ function keyPressed() {
 	} else if ((keyCode == 38 || keyCode == 32) && isFalling == false) {
 		console.log("up arrow");
 		isPlummeting = true;
-	} else if(isFalling == true){
-		console.log("double jumps is prevented" )
+	} else if (isFalling == true) {
+		console.log("double jumps is prevented")
 	}
 
 }
@@ -505,5 +545,5 @@ function keyReleased() {
 	} else if (keyCode == 38 || keyCode == 32) {
 		isPlummeting = false;
 		console.log("isPlummeting is " + isPlummeting);
-	} 
+	}
 }
