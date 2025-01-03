@@ -89,6 +89,7 @@ function draw() {
 	if (dist(gameChar_x + 40, gameChar_y - 50, collectable.x_pos, collectable.y_pos) < 45) {
 		collectable.isFound = true;
 	}
+	
 	//Collectable coin
 	if (!collectable.isFound) {
 		noStroke();

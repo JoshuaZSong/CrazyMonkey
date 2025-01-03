@@ -11,7 +11,10 @@ var mountain;
 var canyon;
 //Trees
 var trees_x;
-var tree_y;
+var trees_y;
+//Clouds
+var cloud_x;
+var cloud_y;
 //Collectable
 var collectable;
 //Character
@@ -52,9 +55,16 @@ function setup() {
 		isFound: false
 	}
 
-	//position of trees in array
-	trees_x = [100, 300, 700, 100, 1400]
-	trees_y = height/2;
+
+	//Trees in array
+	trees_x = [100, 300, 700, 100, 1400];
+	trees_y = height / 2;
+
+	//Clouds in array
+	cloud_x = [150, 600, 1450];
+	cloud_y = 100;
+	cloud_xSize= 180;
+	cloud_ySize= 60;
 }
 
 function draw() {
@@ -68,7 +78,22 @@ function draw() {
 	fill(0, 155, 0);
 	rect(0, floorPos_y, width, height - floorPos_y); //draw some green ground
 
-	
+
+
+	//Draw clouds
+	for (var i = 0; i < cloud_x.length; i++) {
+		noStroke();
+		fill(0, 0, 0);
+		ellipse(
+			cloud_x[i], cloud_y,
+			cloud_xSize, cloud_ySize);
+		ellipse(
+			cloud_x[i] - 90, cloud_y + 10,
+			cloud_xSize - 40, cloud_ySize - 20);
+		ellipse(
+			cloud_x[i] + 120, cloud_y + 10,
+			cloud_xSize - 40, cloud_ySize - 20);
+	}
 
 	// a mountain in the distance
 	noStroke();
@@ -88,7 +113,7 @@ function draw() {
 		mountain.x_pos + 100, mountain.y_pos - 70,
 		mountain.x_pos + 300, mountain.y_pos + 182);
 
-		//Draw trees in for loop
+	//Draw trees in for loop
 	for (var i = 0; i < trees_x.length; i++) {
 		console.log("trees loop" + i)
 		noStroke();
@@ -96,16 +121,11 @@ function draw() {
 		rect(trees_x[i], trees_y, 82, 144);
 		fill(80, 90, 30);
 		ellipse(trees_x[i] + 40, trees_y + 20, 180, 60);
-		ellipse(trees_x[i]+ 40, trees_y - 20, 160, 50);
+		ellipse(trees_x[i] + 40, trees_y - 20, 160, 50);
 		ellipse(trees_x[i] + 40, trees_y - 50, 120, 40);
 
-		//draw collectable item 
-		noStroke();
-		fill(250, 250, 0);
-		ellipse(collectable.x_pos, collectable.y_pos, 20, 40);
-		fill(220, 220, 140);
-		ellipse(collectable.x_pos + 5, collectable.y_pos, 10, 20);
 	}
+
 	//draw the canyon
 	fill(20);
 	rect(canyon.x_pos, canyon.y_pos, canyon.width, width - floorPos_y);
@@ -114,8 +134,9 @@ function draw() {
 	if (dist(gameChar_x + 40, gameChar_y - 50, collectable.x_pos, collectable.y_pos) < 45) {
 		collectable.isFound = true;
 	}
+
 	//Collectable coin
-	if (!collectable.isFound) {
+	if (collectable.isFound == false) {
 		noStroke();
 		fill(250, 250, 0);
 		ellipse(collectable.x_pos, collectable.y_pos, 20, 40);
@@ -190,6 +211,7 @@ function draw() {
 		ellipse(gameChar_x + 105, gameChar_y - 20, 15, 10);
 
 	}
+
 	else if (isRight && isFalling) {
 		// add your jumping-right code
 		fill(139, 69, 19); // brown
@@ -256,6 +278,7 @@ function draw() {
 
 
 	}
+
 	else if (isLeft) {
 		// add your walking left code
 		fill(139, 69, 19); // brown
