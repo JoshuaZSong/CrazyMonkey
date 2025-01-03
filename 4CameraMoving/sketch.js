@@ -42,6 +42,8 @@ function setup() {
 	gameChar_x = width / 6;
 	gameChar_y = floorPos_y;
 
+	push();
+	translate(cameraPosX,0)
 	canyon = {
 		x_pos: width / 2 - 45,
 		y_pos: 432,
@@ -54,7 +56,7 @@ function setup() {
 		size: 50,
 		isFound: false
 	}
-
+	pop();
 
 	//Trees in array
 	trees_x = [100, 300, 700, 100, 1400];
@@ -69,7 +71,6 @@ function setup() {
 	//mountain in array
 	mountains_x = [500, 1100, 1700];
 	mountains_y = 250;
-	pop();
 }
 
 function draw() {
@@ -148,12 +149,13 @@ function draw() {
 		fill(220, 220, 140);
 		ellipse(collectable.x_pos + 5, collectable.y_pos, 10, 20);
 	}
+	pop();
 
 	//the game character
+	push();
 	if (isLeft && isFalling) {
 		// add your jumping-left code
 		// body
-		translate(gameChar_x,gameChar_y)
 		fill(139, 69, 19); // brown
 		stroke(0);
 		strokeWeight(3);
@@ -215,12 +217,10 @@ function draw() {
 		ellipse(gameChar_x + 110, gameChar_y - 15, 4, 8);
 		ellipse(gameChar_x + 100, gameChar_y - 15, 4, 8);
 		ellipse(gameChar_x + 105, gameChar_y - 20, 15, 10);
-
 	}
 
 	else if (isRight && isFalling) {
 		// add your jumping-right code
-		translate(gameChar_x,gameChar_y)
 		fill(139, 69, 19); // brown
 		stroke(0);
 		strokeWeight(3);
@@ -288,7 +288,6 @@ function draw() {
 
 	else if (isLeft) {
 		// add your walking left code
-		translate(gameChar_x,gameChar_y)
 		fill(139, 69, 19); // brown
 		stroke(0);
 		strokeWeight(3);
@@ -358,7 +357,6 @@ function draw() {
 	}
 	else if (isRight) {
 		// add your walking right code
-		translate(gameChar_x,gameChar_y)
 		fill(139, 69, 19); // brown
 		stroke(0);
 		strokeWeight(3);
@@ -428,7 +426,6 @@ function draw() {
 	}
 	else if (isPlummeting || isFalling) {
 		// add your jumping facing forwards code
-		translate(gameChar_x,gameChar_y)
 		fill(139, 69, 19); // brown
 		stroke(0);
 		strokeWeight(3);
@@ -492,7 +489,6 @@ function draw() {
 	}
 	else {
 		// add your standing front facing code
-		translate(gameChar_x,gameChar_y)
 		// body
 		fill(139, 69, 19); // brown
 		stroke(0);
@@ -558,15 +554,16 @@ function draw() {
 		ellipse(gameChar_x - 30, gameChar_y - 85, 4, 8);
 		ellipse(gameChar_x - 25, gameChar_y - 80, 15, 10);
 	}
+	pop();
+	
 
+	translate(cameraPosX,0)
 	///////////INTERACTION CODE//////////
 	//Put conditional statements to move the game character below here
 	if (isLeft == true && isFrozen == false) {
 		cameraPosX += 5;
-		gameChar_x -= 5;
 	} else if (isRight == true && isFrozen == false) {
 		cameraPosX -= 5;
-		gameChar_x += 5;
 	} else if (isJumping == true && isFrozen == false) {
 		gameChar_y -= jumpHeight;
 	}
