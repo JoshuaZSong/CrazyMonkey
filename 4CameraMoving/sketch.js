@@ -1,14 +1,17 @@
 /*
 Author: Joshua Song
 The Game Project
-Week 3
-Game interaction
+Week 4
+Camera Moving
 */
 
 //Background
 var floorPos_y;
 var mountain;
 var canyon;
+//Trees
+var trees_x;
+var tree_y;
 //Collectable
 var collectable;
 //Character
@@ -21,6 +24,7 @@ var isPlummeting = false;
 var isJumping = false;
 var jumpHeight = 100;
 var isFrozen = false;
+
 
 
 
@@ -48,7 +52,9 @@ function setup() {
 		isFound: false
 	}
 
-
+	//position of trees in array
+	trees_x = [100, 300, 700, 100, 1400]
+	trees_y = height/2;
 }
 
 function draw() {
@@ -61,6 +67,8 @@ function draw() {
 	noStroke();
 	fill(0, 155, 0);
 	rect(0, floorPos_y, width, height - floorPos_y); //draw some green ground
+
+	
 
 	// a mountain in the distance
 	noStroke();
@@ -80,7 +88,24 @@ function draw() {
 		mountain.x_pos + 100, mountain.y_pos - 70,
 		mountain.x_pos + 300, mountain.y_pos + 182);
 
+		//Draw trees in for loop
+	for (var i = 0; i < trees_x.length; i++) {
+		console.log("trees loop" + i)
+		noStroke();
+		fill(100, 50, 40);
+		rect(trees_x[i], trees_y, 82, 144);
+		fill(80, 90, 30);
+		ellipse(trees_x[i] + 40, trees_y + 20, 180, 60);
+		ellipse(trees_x[i]+ 40, trees_y - 20, 160, 50);
+		ellipse(trees_x[i] + 40, trees_y - 50, 120, 40);
 
+		//draw collectable item 
+		noStroke();
+		fill(250, 250, 0);
+		ellipse(collectable.x_pos, collectable.y_pos, 20, 40);
+		fill(220, 220, 140);
+		ellipse(collectable.x_pos + 5, collectable.y_pos, 10, 20);
+	}
 	//draw the canyon
 	fill(20);
 	rect(canyon.x_pos, canyon.y_pos, canyon.width, width - floorPos_y);
@@ -514,10 +539,10 @@ function draw() {
 	if (gameChar_y < floorPos_y) {
 		isFalling = true
 		gameChar_y += 4;
-	} else if(gameChar_y == floorPos_y){
+	} else if (gameChar_y == floorPos_y) {
 		isPlummeting = false;
 		isFalling = false;
-	} else{
+	} else {
 		isPlummeting = false;
 		isFalling = true;
 		isFrozen = true;
@@ -528,8 +553,8 @@ function draw() {
 	}
 
 	//falling into the canyon
-	if(gameChar_x + 30 > canyon.x_pos && gameChar_x + 60 < canyon.x_pos + canyon.width){
-		if(isPlummeting == false){
+	if (gameChar_x + 30 > canyon.x_pos && gameChar_x + 60 < canyon.x_pos + canyon.width) {
+		if (isPlummeting == false) {
 			gameChar_y += 4;
 		}
 	}
