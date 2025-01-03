@@ -30,6 +30,8 @@ var isPlummeting = false;
 var isJumping = false;
 var jumpHeight = 100;
 var isFrozen = false;
+//Moving camera
+var cameraPosX = 0;
 
 
 
@@ -67,6 +69,7 @@ function setup() {
 	//mountain in array
 	mountains_x = [500, 1100, 1700];
 	mountains_y = 250;
+	pop();
 }
 
 function draw() {
@@ -75,16 +78,16 @@ function draw() {
 
 	background(100, 155, 255); //fill the sky blue
 
+	push();
+	//Set up the initial point
+	translate(cameraPosX,0);
 
 	noStroke();
 	fill(0, 155, 0);
 	rect(0, floorPos_y, width, height - floorPos_y); //draw some green ground
 
-
-
 	//Draw clouds
 	for (var i = 0; i < cloud_x.length; i++) {
-		push();
 		noStroke();
 		fill(0, 0, 0);
 		ellipse(
@@ -96,7 +99,6 @@ function draw() {
 		ellipse(
 			cloud_x[i] + 120, cloud_y + 10,
 			cloud_xSize - 40, cloud_ySize - 20);
-		pop();
 	}
 
 	//Draw trees in for loop
@@ -108,7 +110,6 @@ function draw() {
 		ellipse(trees_x[i] + 40, trees_y + 20, 180, 60);
 		ellipse(trees_x[i] + 40, trees_y - 20, 160, 50);
 		ellipse(trees_x[i] + 40, trees_y - 50, 120, 40);
-
 	}
 
 	//Draw muntains in for loop
@@ -152,6 +153,7 @@ function draw() {
 	if (isLeft && isFalling) {
 		// add your jumping-left code
 		// body
+		translate(gameChar_x,gameChar_y)
 		fill(139, 69, 19); // brown
 		stroke(0);
 		strokeWeight(3);
@@ -218,6 +220,7 @@ function draw() {
 
 	else if (isRight && isFalling) {
 		// add your jumping-right code
+		translate(gameChar_x,gameChar_y)
 		fill(139, 69, 19); // brown
 		stroke(0);
 		strokeWeight(3);
@@ -285,6 +288,7 @@ function draw() {
 
 	else if (isLeft) {
 		// add your walking left code
+		translate(gameChar_x,gameChar_y)
 		fill(139, 69, 19); // brown
 		stroke(0);
 		strokeWeight(3);
@@ -354,6 +358,7 @@ function draw() {
 	}
 	else if (isRight) {
 		// add your walking right code
+		translate(gameChar_x,gameChar_y)
 		fill(139, 69, 19); // brown
 		stroke(0);
 		strokeWeight(3);
@@ -423,6 +428,7 @@ function draw() {
 	}
 	else if (isPlummeting || isFalling) {
 		// add your jumping facing forwards code
+		translate(gameChar_x,gameChar_y)
 		fill(139, 69, 19); // brown
 		stroke(0);
 		strokeWeight(3);
@@ -486,6 +492,7 @@ function draw() {
 	}
 	else {
 		// add your standing front facing code
+		translate(gameChar_x,gameChar_y)
 		// body
 		fill(139, 69, 19); // brown
 		stroke(0);
@@ -555,8 +562,10 @@ function draw() {
 	///////////INTERACTION CODE//////////
 	//Put conditional statements to move the game character below here
 	if (isLeft == true && isFrozen == false) {
+		cameraPosX += 5;
 		gameChar_x -= 5;
 	} else if (isRight == true && isFrozen == false) {
+		cameraPosX -= 5;
 		gameChar_x += 5;
 	} else if (isJumping == true && isFrozen == false) {
 		gameChar_y -= jumpHeight;
