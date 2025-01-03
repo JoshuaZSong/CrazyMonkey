@@ -2,7 +2,7 @@
 Author: Joshua Song
 The Game Project
 Week 4
-Camera Moving
+Camera Moving - Mid-Term
 */
 
 //Background
@@ -40,7 +40,6 @@ function setup() {
 	gameChar_x = width / 6;
 	gameChar_y = floorPos_y;
 
-	translate(cameraPosX,0)
 	canyon = {
 		x_pos: width / 2 - 45,
 		y_pos: 432,
@@ -51,7 +50,7 @@ function setup() {
 		x_pos: width / 2,
 		y_pos: 350,
 		size: 50,
-		isFound: false
+		isFound: false//collectable's visablity
 	}
 
 	//Trees in array
@@ -70,18 +69,17 @@ function setup() {
 }
 
 function draw() {
+	//FIll the background with blue sky
+	background(100, 155, 255);
 
-	///////////DRAWING CODE//////////
-
-	background(100, 155, 255); //fill the sky blue
-
+	//Make the background "moving" following the camera
 	push();
-	//Set up the initial point
-	translate(cameraPosX,0);
+	translate(cameraPosX, 0);//set up the initial point
 
+	//Draw green ground
 	noStroke();
 	fill(0, 155, 0);
-	rect(floorPos_x , floorPos_y, width, height - floorPos_y); //draw some green ground
+	rect(floorPos_x, floorPos_y, width, height - floorPos_y);
 
 	//Draw clouds
 	for (var i = 0; i < cloud_x.length; i++) {
@@ -98,7 +96,7 @@ function draw() {
 			cloud_xSize - 40, cloud_ySize - 20);
 	}
 
-	//Draw trees in for loop
+	//Draw trees
 	for (var i = 0; i < trees_x.length; i++) {
 		noStroke();
 		fill(100, 50, 40);
@@ -109,7 +107,7 @@ function draw() {
 		ellipse(trees_x[i] + 40, trees_y - 50, 120, 40);
 	}
 
-	//Draw muntains in for loop
+	//Draw muntains
 	for (var i = 0; i < mountains_x.length; i++) {
 		fill(100, 100, 30, 100);
 		triangle(
@@ -128,11 +126,12 @@ function draw() {
 			mountains_x[i] + 300, mountains_y + 182);
 	}
 
-	//draw the canyon
+	//Draw a canyon
 	fill(20);
 	rect(canyon.x_pos, canyon.y_pos, canyon.width, width - floorPos_y);
 
-	//draw collectable item 
+	//Draw collectable item
+	//If the distance of the collectable and the character is closer than 45 the collectable will disappear
 	if (dist(gameChar_x + 40, gameChar_y - 50, collectable.x_pos + cameraPosX, collectable.y_pos) < 45) {
 		collectable.isFound = true;
 	}
@@ -147,25 +146,21 @@ function draw() {
 	}
 	pop();
 
-	//the game character
-	push();
-	if (isLeft && isFalling) {
-		// add your jumping-left code
-		// body
-		fill(139, 69, 19); // brown
+	//The game character
+	push();//to make the character not moving
+	if (isLeft && isFalling) {//the character jumping and facing the left side
+		//Body
+		fill(139, 69, 19); //brown
 		stroke(0);
 		strokeWeight(3);
-		ellipse(gameChar_x + 40, gameChar_y - 50, 80, 80); //body
-
-		//arms and legs
+		ellipse(gameChar_x + 40, gameChar_y - 50, 80, 80);
+		//Arms and legs
 		strokeWeight(4);
 		line(gameChar_x + 50, gameChar_y - 40, gameChar_x + 60, gameChar_y);//left arm
 		line(gameChar_x + 80, gameChar_y - 40, gameChar_x + 90, gameChar_y);//right arm
 		line(gameChar_x + 24, gameChar_y - 40, gameChar_x + 32, gameChar_y);//right leg
 		line(gameChar_x + 60, gameChar_y - 19, gameChar_x + 65, gameChar_y);//left leg  
-
-
-		// face
+		//Face
 		strokeWeight(3);
 		ellipse(gameChar_x + 30, gameChar_y - 70, 55, 48); //head
 		fill(225, 0, 0);
@@ -181,7 +176,7 @@ function draw() {
 		strokeWeight(2);
 		line(gameChar_x + 4, gameChar_y - 64,
 			gameChar_x + 46, gameChar_y - 65);
-		//teeth
+		//Teeth
 		strokeWeight(1);
 		fill(225, 0, 0);
 		beginShape();
@@ -193,19 +188,17 @@ function draw() {
 		vertex(gameChar_x + 36, gameChar_y - 50);
 		vertex(gameChar_x + 41, gameChar_y - 64);
 		endShape();
-		//eyes
+		//E
 		stroke(240, 125, 0);
 		strokeWeight(5);
 		point(gameChar_x + 40, gameChar_y - 75);
 		point(gameChar_x + 20, gameChar_y - 75);
-
-		//tail magic hand
+		//Tail with a magic hand
 		noFill();
 		stroke(139, 69, 19);
 		strokeWeight(7);
 		line(gameChar_x + 80, gameChar_y - 60,
 			gameChar_x + 105, gameChar_y - 20);
-
 		fill(255);
 		stroke(0);
 		strokeWeight(1);
@@ -215,22 +208,19 @@ function draw() {
 		ellipse(gameChar_x + 105, gameChar_y - 20, 15, 10);
 	}
 
-	else if (isRight && isFalling) {
-		// add your jumping-right code
+	else if (isRight && isFalling) {//the character jumping facing the right side
+		//Body
 		fill(139, 69, 19); // brown
 		stroke(0);
 		strokeWeight(3);
-		ellipse(gameChar_x + 50, gameChar_y - 60, 80, 80); //body
-
-		//arms and legs
+		ellipse(gameChar_x + 50, gameChar_y - 60, 80, 80);
+		//Arms and legs
 		strokeWeight(4);
 		line(gameChar_x + 40, gameChar_y - 40, gameChar_x + 30, gameChar_y);//left arm
 		line(gameChar_x + 70, gameChar_y - 40, gameChar_x + 60, gameChar_y);//right arm
 		line(gameChar_x + 14, gameChar_y - 40, gameChar_x + 2, gameChar_y);//right leg
 		line(gameChar_x + 50, gameChar_y - 19, gameChar_x + 45, gameChar_y);//left leg  
-
-
-		// face
+		//Face
 		strokeWeight(3);
 		ellipse(gameChar_x + 65, gameChar_y - 70, 55, 48); //head
 		fill(225, 0, 0);
@@ -246,7 +236,7 @@ function draw() {
 		strokeWeight(2);
 		line(gameChar_x + 39, gameChar_y - 64,
 			gameChar_x + 81, gameChar_y - 65);
-		//teeth
+		//Teeth
 		strokeWeight(1);
 		fill(225, 0, 0);
 		beginShape();
@@ -258,19 +248,17 @@ function draw() {
 		vertex(gameChar_x + 71, gameChar_y - 50);
 		vertex(gameChar_x + 76, gameChar_y - 64);
 		endShape();
-		//eyes
+		//Eyes
 		stroke(240, 125, 0);
 		strokeWeight(5);
 		point(gameChar_x + 75, gameChar_y - 75);
 		point(gameChar_x + 55, gameChar_y - 75);
-
-		//tail magic hand
+		//Tail with a magic hand
 		noFill();
 		stroke(139, 69, 19);
 		strokeWeight(7);
 		line(gameChar_x + 10, gameChar_y - 60,
 			gameChar_x - 5, gameChar_y - 20);
-
 		fill(255);
 		stroke(0);
 		strokeWeight(1);
@@ -278,18 +266,15 @@ function draw() {
 		ellipse(gameChar_x, gameChar_y - 15, 4, 8);
 		ellipse(gameChar_x - 10, gameChar_y - 15, 4, 8);
 		ellipse(gameChar_x - 5, gameChar_y - 20, 15, 10);
-
-
 	}
 
-	else if (isLeft) {
-		// add your walking left code
+	else if (isLeft) {//the character walking facing the left side
+		//Body
 		fill(139, 69, 19); // brown
 		stroke(0);
 		strokeWeight(3);
-		ellipse(gameChar_x + 40, gameChar_y - 50, 80, 80); //body
-
-		//arms and legs
+		ellipse(gameChar_x + 40, gameChar_y - 50, 80, 80);
+		//Arms and legs
 		strokeWeight(4);
 		line(gameChar_x + 20, gameChar_y - 30, gameChar_x + 10, gameChar_y - 10);//right arm
 		line(gameChar_x + 10, gameChar_y - 10, gameChar_x + 15, gameChar_y + 10);//right arm
@@ -298,8 +283,7 @@ function draw() {
 		line(gameChar_x + 75, gameChar_y - 30, gameChar_x + 94, gameChar_y - 15);//right leg
 		line(gameChar_x + 94, gameChar_y - 15, gameChar_x + 85, gameChar_y + 10);//right leg
 		line(gameChar_x + 30, gameChar_y - 10, gameChar_x + 35, gameChar_y + 10);//left leg 
-
-		// face
+		// Face
 		strokeWeight(3);
 		ellipse(gameChar_x + 15, gameChar_y - 70, 55, 48); //head
 		fill(225, 0, 0);
@@ -315,7 +299,7 @@ function draw() {
 		strokeWeight(2);
 		line(gameChar_x - 11, gameChar_y - 64,
 			gameChar_x + 31, gameChar_y - 65);
-		//teeth
+		//Teeth
 		strokeWeight(1);
 		fill(225, 0, 0);
 		beginShape();
@@ -327,13 +311,12 @@ function draw() {
 		vertex(gameChar_x + 21, gameChar_y - 50);
 		vertex(gameChar_x + 26, gameChar_y - 64);
 		endShape();
-		//eyes
+		//Eyes
 		stroke(240, 125, 0);
 		strokeWeight(5);
 		point(gameChar_x + 25, gameChar_y - 75);
 		point(gameChar_x + 5, gameChar_y - 75);
-
-		//tail magic hand
+		//Tail with a magic hand
 		noFill();
 		stroke(139, 69, 19);
 		strokeWeight(7);
@@ -341,7 +324,6 @@ function draw() {
 			gameChar_x + 95, gameChar_y - 45);
 		line(gameChar_x + 95, gameChar_y - 45,
 			gameChar_x + 105, gameChar_y - 80);
-
 		fill(255);
 		stroke(0);
 		strokeWeight(1);
@@ -349,16 +331,15 @@ function draw() {
 		ellipse(gameChar_x + 110, gameChar_y - 85, 4, 8);
 		ellipse(gameChar_x + 100, gameChar_y - 85, 4, 8);
 		ellipse(gameChar_x + 105, gameChar_y - 80, 15, 10);
-
 	}
-	else if (isRight) {
-		// add your walking right code
-		fill(139, 69, 19); // brown
+
+	else if (isRight) {//the character waling facing the right side
+		//Body
+		fill(139, 69, 19); //brown
 		stroke(0);
 		strokeWeight(3);
-		ellipse(gameChar_x + 40, gameChar_y - 50, 80, 80); //body
-
-		//arms and legs
+		ellipse(gameChar_x + 40, gameChar_y - 50, 80, 80);
+		//Arms and legs
 		strokeWeight(4);
 		line(gameChar_x + 30, gameChar_y - 30, gameChar_x + 10, gameChar_y - 10);//left arm
 		line(gameChar_x + 10, gameChar_y - 10, gameChar_x + 15, gameChar_y + 10);//left arm
@@ -367,8 +348,7 @@ function draw() {
 		line(gameChar_x + 4, gameChar_y - 30, gameChar_x - 15, gameChar_y - 15);//left leg
 		line(gameChar_x - 15, gameChar_y - 15, gameChar_x - 10, gameChar_y + 10);//right leg  
 		line(gameChar_x + 50, gameChar_y - 10, gameChar_x + 45, gameChar_y + 10);//right leg 
-
-		// face
+		// Face
 		strokeWeight(3);
 		ellipse(gameChar_x + 65, gameChar_y - 70, 55, 48); //head
 		fill(225, 0, 0);
@@ -384,7 +364,7 @@ function draw() {
 		strokeWeight(2);
 		line(gameChar_x + 39, gameChar_y - 64,
 			gameChar_x + 81, gameChar_y - 65);
-		//teeth
+		//Teeth
 		strokeWeight(1);
 		fill(225, 0, 0);
 		beginShape();
@@ -396,13 +376,12 @@ function draw() {
 		vertex(gameChar_x + 71, gameChar_y - 50);
 		vertex(gameChar_x + 76, gameChar_y - 64);
 		endShape();
-		//eyes
+		//Eyes
 		stroke(240, 125, 0);
 		strokeWeight(5);
 		point(gameChar_x + 75, gameChar_y - 75);
 		point(gameChar_x + 55, gameChar_y - 75);
-
-		//tail magic hand
+		//Tail with a magic hand
 		noFill();
 		stroke(139, 69, 19);
 		strokeWeight(7);
@@ -410,7 +389,6 @@ function draw() {
 			gameChar_x - 15, gameChar_y - 45);
 		line(gameChar_x - 15, gameChar_y - 45,
 			gameChar_x - 25, gameChar_y - 80);
-
 		fill(255);
 		stroke(0);
 		strokeWeight(1);
@@ -418,22 +396,20 @@ function draw() {
 		ellipse(gameChar_x - 20, gameChar_y - 85, 4, 8);
 		ellipse(gameChar_x - 30, gameChar_y - 85, 4, 8);
 		ellipse(gameChar_x - 25, gameChar_y - 80, 15, 10);
-
 	}
-	else if (isPlummeting || isFalling) {
-		// add your jumping facing forwards code
+
+	else if (isPlummeting || isFalling) {//the character jumping facing front
+		//Body
 		fill(139, 69, 19); // brown
 		stroke(0);
 		strokeWeight(3);
-		ellipse(gameChar_x + 40, gameChar_y - 60, 80, 80); //body
-
-		//arms and legs
+		ellipse(gameChar_x + 40, gameChar_y - 60, 80, 80);
+		//Arms and legs
 		strokeWeight(4);
 		line(gameChar_x + 20, gameChar_y - 30, gameChar_x + 20, gameChar_y - 10);//left arm
 		line(gameChar_x + 60, gameChar_y - 30, gameChar_x + 60, gameChar_y - 10);//right arm
 		line(gameChar_x + 50, gameChar_y - 20, gameChar_x + 50, gameChar_y + 5);//left leg 
 		line(gameChar_x + 30, gameChar_y - 20, gameChar_x + 30, gameChar_y + 5);//right leg 
-
 		strokeWeight(3);
 		ellipse(gameChar_x + 40, gameChar_y - 70, 55, 48); //head
 		fill(225, 0, 0);
@@ -449,7 +425,7 @@ function draw() {
 		strokeWeight(2);
 		line(gameChar_x + 14, gameChar_y - 64,
 			gameChar_x + 56, gameChar_y - 65);
-		//teeth
+		//Teeth
 		strokeWeight(1);
 		fill(225, 0, 0);
 		beginShape();
@@ -461,18 +437,17 @@ function draw() {
 		vertex(gameChar_x + 46, gameChar_y - 50);
 		vertex(gameChar_x + 51, gameChar_y - 64);
 		endShape();
-		//eyes
+		//Eyes
 		stroke(240, 125, 0);
 		strokeWeight(5);
 		point(gameChar_x + 50, gameChar_y - 75);
 		point(gameChar_x + 30, gameChar_y - 75);
-		//tail magic hand
+		//Tail with a magic hand
 		noFill();
 		stroke(139, 69, 19);
 		strokeWeight(7);
 		line(gameChar_x, gameChar_y - 60,
 			gameChar_x - 5, gameChar_y - 20);
-
 		fill(255);
 		stroke(0);
 		strokeWeight(1);
@@ -480,18 +455,15 @@ function draw() {
 		ellipse(gameChar_x, gameChar_y - 15, 4, 8);
 		ellipse(gameChar_x - 10, gameChar_y - 15, 4, 8);
 		ellipse(gameChar_x - 5, gameChar_y - 20, 15, 10);
-
-
 	}
-	else {
-		// add your standing front facing code
+
+	else {//the character stand facing front
 		// body
 		fill(139, 69, 19); // brown
 		stroke(0);
 		strokeWeight(3);
-		ellipse(gameChar_x + 40, gameChar_y - 50, 80, 80); //body
-
-		//arms and legs
+		ellipse(gameChar_x + 40, gameChar_y - 50, 80, 80);
+		//Arms and legs
 		strokeWeight(4);
 		line(gameChar_x + 25, gameChar_y - 30, gameChar_x + 10, gameChar_y - 10);//left arm
 		line(gameChar_x + 10, gameChar_y - 10, gameChar_x + 15, gameChar_y + 10);//left arm
@@ -499,8 +471,7 @@ function draw() {
 		line(gameChar_x + 70, gameChar_y - 10, gameChar_x + 65, gameChar_y + 10);//right arm 
 		line(gameChar_x + 50, gameChar_y - 10, gameChar_x + 50, gameChar_y + 10);//right leg 
 		line(gameChar_x + 30, gameChar_y - 10, gameChar_x + 30, gameChar_y + 10);//right leg 
-
-		// face
+		// Face
 		strokeWeight(3);
 		ellipse(gameChar_x + 40, gameChar_y - 70, 55, 48); //head
 		fill(225, 0, 0);
@@ -516,7 +487,7 @@ function draw() {
 		strokeWeight(2);
 		line(gameChar_x + 14, gameChar_y - 64,
 			gameChar_x + 56, gameChar_y - 65);
-		//teeth
+		//Teeth
 		strokeWeight(1);
 		fill(225, 0, 0);
 		beginShape();
@@ -528,13 +499,12 @@ function draw() {
 		vertex(gameChar_x + 46, gameChar_y - 50);
 		vertex(gameChar_x + 51, gameChar_y - 64);
 		endShape();
-		//eyes
+		//Eyes
 		stroke(240, 125, 0);
 		strokeWeight(5);
 		point(gameChar_x + 50, gameChar_y - 75);
 		point(gameChar_x + 30, gameChar_y - 75);
-
-		//tail magic hand
+		//Tail with a magic hand
 		noFill();
 		stroke(139, 69, 19);
 		strokeWeight(7);
@@ -551,25 +521,24 @@ function draw() {
 		ellipse(gameChar_x - 25, gameChar_y - 80, 15, 10);
 	}
 	pop();
-	
-	///////////INTERACTION CODE//////////
-	//Put conditional statements to move the game character below here
-	if (isLeft == true && isFrozen == false) {
+
+	//The opposite position change(opposite to the background)
+	if (isLeft == true && isFrozen == false) {//when going left
 		cameraPosX += 5;
 		floorPos_x -= 5
 		//gameChar_x -=5;
-	} else if (isRight == true && isFrozen == false) {
+	} else if (isRight == true && isFrozen == false) {//when going right
 		cameraPosX -= 5;
 		floorPos_x += 5;
 		//gameChar_x +=5;
-	} else if (isJumping == true && isFrozen == false) {
+	} else if (isJumping == true && isFrozen == false) {//when jumping
 		gameChar_y -= jumpHeight;
 	}
 
 	//add gravity
 	if (gameChar_y < floorPos_y) {
 		isFalling = true
-		gameChar_y += 4;
+		gameChar_y += 4;//character's fallign speed
 	} else if (gameChar_y == floorPos_y) {
 		isPlummeting = false;
 		isFalling = false;
@@ -579,6 +548,7 @@ function draw() {
 		isFrozen = true;
 	}
 
+	//Avoid double jumping
 	if (gameChar_y < (floorPos_y - jumpHeight)) {
 		isJumping = false;
 	}
@@ -591,15 +561,11 @@ function draw() {
 	}
 }
 
-
 function keyPressed() {
-	// if statements to control the animation of the character when
-	// keys are pressed.
-
-	//open up the console to see how these work
+	//Open up the console to see how these press work
 	console.log("keyPressed: " + key);
-	console.log("keyPressed: " + keyCode);
 
+	//If statements to control the animation of the character when keys are pressed.
 	if (keyCode == 37) {
 		console.log("left arrow");
 		isLeft = true;
@@ -609,19 +575,16 @@ function keyPressed() {
 	} else if ((keyCode == 38 || keyCode == 32) && isFalling == false) {
 		console.log("up arrow");
 		isJumping = true;
-	} else if (isFalling == true) {
+	} else if (isFalling == true) {//to avoid double jumping
 		console.log("double jumps is prevented")
 	}
-
 }
 
 function keyReleased() {
-	// if statements to control the animation of the character when
-	// keys are released.
-
+	//Open up the console to see how the release work
 	console.log("keyReleased: " + key);
-	console.log("keyReleased: " + keyCode);
 
+	//If statements to control the animation of the character when keys are released.
 	if (keyCode == 37) {
 		isLeft = false;
 		console.log("isLeft is " + isLeft);
