@@ -7,6 +7,7 @@ Camera Moving
 
 //Background
 var floorPos_y;
+var floorPos_x = 0;
 //nountain
 var mountains_x;
 var mountains_y;
@@ -33,16 +34,12 @@ var isFrozen = false;
 //Moving camera
 var cameraPosX = 0;
 
-
-
-
 function setup() {
 	createCanvas(1024, 576);
 	floorPos_y = height * 3 / 4;
 	gameChar_x = width / 6;
 	gameChar_y = floorPos_y;
 
-	push();
 	translate(cameraPosX,0)
 	canyon = {
 		x_pos: width / 2 - 45,
@@ -56,7 +53,6 @@ function setup() {
 		size: 50,
 		isFound: false
 	}
-	pop();
 
 	//Trees in array
 	trees_x = [100, 300, 700, 100, 1400];
@@ -85,7 +81,7 @@ function draw() {
 
 	noStroke();
 	fill(0, 155, 0);
-	rect(0, floorPos_y, width, height - floorPos_y); //draw some green ground
+	rect(floorPos_x , floorPos_y, width, height - floorPos_y); //draw some green ground
 
 	//Draw clouds
 	for (var i = 0; i < cloud_x.length; i++) {
@@ -137,7 +133,7 @@ function draw() {
 	rect(canyon.x_pos, canyon.y_pos, canyon.width, width - floorPos_y);
 
 	//draw collectable item 
-	if (dist(gameChar_x + 40, gameChar_y - 50, collectable.x_pos, collectable.y_pos) < 45) {
+	if (dist(gameChar_x + 40, gameChar_y - 50, collectable.x_pos + cameraPosX, collectable.y_pos) < 45) {
 		collectable.isFound = true;
 	}
 
@@ -556,14 +552,16 @@ function draw() {
 	}
 	pop();
 	
-
-	translate(cameraPosX,0)
 	///////////INTERACTION CODE//////////
 	//Put conditional statements to move the game character below here
 	if (isLeft == true && isFrozen == false) {
 		cameraPosX += 5;
+		floorPos_x -= 5
+		//gameChar_x -=5;
 	} else if (isRight == true && isFrozen == false) {
 		cameraPosX -= 5;
+		floorPos_x += 5;
+		//gameChar_x +=5;
 	} else if (isJumping == true && isFrozen == false) {
 		gameChar_y -= jumpHeight;
 	}
@@ -586,7 +584,7 @@ function draw() {
 	}
 
 	//falling into the canyon
-	if (gameChar_x + 30 > canyon.x_pos && gameChar_x + 60 < canyon.x_pos + canyon.width) {
+	if (gameChar_x + 30 > canyon.x_pos + cameraPosX && gameChar_x + 60 - cameraPosX < canyon.x_pos + canyon.width) {
 		if (isPlummeting == false) {
 			gameChar_y += 4;
 		}
