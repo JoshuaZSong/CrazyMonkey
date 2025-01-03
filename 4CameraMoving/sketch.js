@@ -153,7 +153,7 @@ function draw() {
 		noFill();
 		stroke(139, 69, 19);
 		strokeWeight(7);
-		line(gameChar_x + 90, gameChar_y - 60,
+		line(gameChar_x + 80, gameChar_y - 60,
 			gameChar_x + 105, gameChar_y - 20);
 
 		fill(255);
