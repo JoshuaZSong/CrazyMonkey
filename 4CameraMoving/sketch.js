@@ -96,17 +96,6 @@ function draw() {
 			cloud_xSize - 40, cloud_ySize - 20);
 	}
 
-	//Draw trees
-	for (var i = 0; i < trees_x.length; i++) {
-		noStroke();
-		fill(100, 50, 40);
-		rect(trees_x[i], trees_y, 82, 144);
-		fill(80, 90, 30);
-		ellipse(trees_x[i] + 40, trees_y + 20, 180, 60);
-		ellipse(trees_x[i] + 40, trees_y - 20, 160, 50);
-		ellipse(trees_x[i] + 40, trees_y - 50, 120, 40);
-	}
-
 	//Draw muntains
 	for (var i = 0; i < mountains_x.length; i++) {
 		fill(100, 100, 30, 100);
@@ -124,6 +113,17 @@ function draw() {
 			mountains_x[i] - 150, mountains_y + 182,
 			mountains_x[i] + 100, mountains_y - 70,
 			mountains_x[i] + 300, mountains_y + 182);
+	}
+
+	//Draw trees
+	for (var i = 0; i < trees_x.length; i++) {
+		noStroke();
+		fill(100, 50, 40);
+		rect(trees_x[i], trees_y, 82, 144);
+		fill(80, 90, 30);
+		ellipse(trees_x[i] + 40, trees_y + 20, 180, 60);
+		ellipse(trees_x[i] + 40, trees_y - 20, 160, 50);
+		ellipse(trees_x[i] + 40, trees_y - 50, 120, 40);
 	}
 
 	//Draw a canyon
@@ -188,7 +188,7 @@ function draw() {
 		vertex(gameChar_x + 36, gameChar_y - 50);
 		vertex(gameChar_x + 41, gameChar_y - 64);
 		endShape();
-		//E
+		//Eyes
 		stroke(240, 125, 0);
 		strokeWeight(5);
 		point(gameChar_x + 40, gameChar_y - 75);
@@ -554,7 +554,7 @@ function draw() {
 	}
 
 	//falling into the canyon
-	if (gameChar_x + 30 > canyon.x_pos + cameraPosX && gameChar_x + 60 - cameraPosX < canyon.x_pos + canyon.width) {
+	if (gameChar_x + 30 > canyon.x_pos + cameraPosX && gameChar_x + 45 - cameraPosX < canyon.x_pos + canyon.width) {
 		if (isPlummeting == false) {
 			gameChar_y += 4;
 		}
