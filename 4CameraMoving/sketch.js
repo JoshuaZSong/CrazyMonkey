@@ -7,7 +7,10 @@ Camera Moving
 
 //Background
 var floorPos_y;
-var mountain;
+//nountain
+var mountains_x;
+var mountains_y;
+//Canyon
 var canyon;
 //Trees
 var trees_x;
@@ -37,11 +40,6 @@ function setup() {
 	gameChar_x = width / 6;
 	gameChar_y = floorPos_y;
 
-	mountain = {
-		x_pos: 500,
-		y_pos: 250,
-	}
-
 	canyon = {
 		x_pos: width / 2 - 45,
 		y_pos: 432,
@@ -63,8 +61,12 @@ function setup() {
 	//Clouds in array
 	cloud_x = [150, 600, 1450];
 	cloud_y = 100;
-	cloud_xSize= 180;
-	cloud_ySize= 60;
+	cloud_xSize = 180;
+	cloud_ySize = 60;
+
+	//mountain in array
+	mountains_x = [500, 1100, 1700];
+	mountains_y = 250;
 }
 
 function draw() {
@@ -82,6 +84,7 @@ function draw() {
 
 	//Draw clouds
 	for (var i = 0; i < cloud_x.length; i++) {
+		push();
 		noStroke();
 		fill(0, 0, 0);
 		ellipse(
@@ -93,29 +96,11 @@ function draw() {
 		ellipse(
 			cloud_x[i] + 120, cloud_y + 10,
 			cloud_xSize - 40, cloud_ySize - 20);
+		pop();
 	}
-
-	// a mountain in the distance
-	noStroke();
-	fill(100, 100, 30, 100);
-	triangle(
-		mountain.x_pos - 200, mountain.y_pos + 182,
-		mountain.x_pos, mountain.y_pos,
-		mountain.x_pos + 100, mountain.y_pos + 182);
-	fill(100, 100, 30, 100);
-	triangle(
-		mountain.x_pos, mountain.y_pos + 182,
-		mountain.x_pos + 200, mountain.y_pos,
-		mountain.x_pos + 330, mountain.y_pos + 182);
-	fill(100, 100, 30);
-	triangle(
-		mountain.x_pos - 150, mountain.y_pos + 182,
-		mountain.x_pos + 100, mountain.y_pos - 70,
-		mountain.x_pos + 300, mountain.y_pos + 182);
 
 	//Draw trees in for loop
 	for (var i = 0; i < trees_x.length; i++) {
-		console.log("trees loop" + i)
 		noStroke();
 		fill(100, 50, 40);
 		rect(trees_x[i], trees_y, 82, 144);
@@ -124,6 +109,25 @@ function draw() {
 		ellipse(trees_x[i] + 40, trees_y - 20, 160, 50);
 		ellipse(trees_x[i] + 40, trees_y - 50, 120, 40);
 
+	}
+
+	//Draw muntains in for loop
+	for (var i = 0; i < mountains_x.length; i++) {
+		fill(100, 100, 30, 100);
+		triangle(
+			mountains_x[i] - 200, mountains_y + 182,
+			mountains_x[i], mountains_y,
+			mountains_x[i] + 100, mountains_y + 182);
+		fill(100, 100, 30, 100);
+		triangle(
+			mountains_x[i], mountains_y + 182,
+			mountains_x[i] + 200, mountains_y,
+			mountains_x[i] + 330, mountains_y + 182);
+		fill(100, 100, 30);
+		triangle(
+			mountains_x[i] - 150, mountains_y + 182,
+			mountains_x[i] + 100, mountains_y - 70,
+			mountains_x[i] + 300, mountains_y + 182);
 	}
 
 	//draw the canyon
