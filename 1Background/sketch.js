@@ -73,7 +73,7 @@ function draw()
 
 	//draw a canyon
 	fill(20);
-	rect(canyon.x_pos,canyon.width, 50 ,width - floorPos_y)
+	rect(canyon.x_pos,canyon.width, 50 ,width - floorPos_y);
 
 	// a mountain in the distance
 	noStroke();
@@ -113,7 +113,7 @@ function draw()
 	triangle(205,150,190,180,200,175);
 	triangle(200,175,210,165,195,210);
 
-	//on more cloud in the sky
+	//one more cloud in the sky
 	
 	noStroke();
 	fill(0,0,0);
