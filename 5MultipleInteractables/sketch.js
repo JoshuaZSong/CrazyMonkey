@@ -115,8 +115,7 @@ function draw() {
 	}
 
 	//Draw a canyon
-	fill(20);
-	rect(canyon.x_pos, canyon.y_pos, canyon.width, width - floorPos_y);
+	drawCanyon(canyon);
 
 	//Draw collectable item
 	//If the distance of the collectable and the character is closer than 45 the collectable will disappear
@@ -126,7 +125,7 @@ function draw() {
 
 	//Collectable coin
 	drawCollectable(collectable);
-
+	pop();
 
 	//The game character
 	push();//to make the character not moving
@@ -605,5 +604,11 @@ function drawCollectable(t_collectable) {
 		fill(220, 220, 140);
 		ellipse(t_collectable.x_pos + 5, t_collectable.y_pos, 10, 20);
 	}
-	pop();
+	
+}
+
+function drawCanyon(t_canyon) {
+	fill(20);
+	rect(t_canyon.x_pos, t_canyon.y_pos, t_canyon.width, width - floorPos_y);
+
 }
