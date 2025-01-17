@@ -125,14 +125,8 @@ function draw() {
 	}
 
 	//Collectable coin
-	if (collectable.isFound == false) {
-		noStroke();
-		fill(250, 250, 0);
-		ellipse(collectable.x_pos, collectable.y_pos, 20, 40);
-		fill(220, 220, 140);
-		ellipse(collectable.x_pos + 5, collectable.y_pos, 10, 20);
-	}
-	pop();
+	drawCollectable(collectable);
+
 
 	//The game character
 	push();//to make the character not moving
@@ -587,7 +581,7 @@ function keyReleased() {
 	}
 }
 
-function drawCloud(){
+function drawCloud() {
 	for (var i = 0; i < cloud_x.length; i++) {
 		noStroke();
 		fill(0, 0, 0);
@@ -601,4 +595,15 @@ function drawCloud(){
 			cloud_x[i] + 120, cloud_y + 10,
 			cloud_xSize - 40, cloud_ySize - 20);
 	}
+}
+
+function drawCollectable(t_collectable) {
+	if (t_collectable.isFound == false) {
+		noStroke();
+		fill(250, 250, 0);
+		ellipse(t_collectable.x_pos, t_collectable.y_pos, 20, 40);
+		fill(220, 220, 140);
+		ellipse(t_collectable.x_pos + 5, t_collectable.y_pos, 10, 20);
+	}
+	pop();
 }
