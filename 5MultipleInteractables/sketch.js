@@ -21,6 +21,7 @@ var cloud_x;
 var cloud_y;
 //Collectable
 var collectable;
+var collectables;
 //Character
 var gameChar_x;
 var gameChar_y;
@@ -46,12 +47,34 @@ function setup() {
 		width: 100
 	}
 
+
 	collectable = {
-		x_pos: width / 2,
+		x_pos: 512,
 		y_pos: 350,
 		size: 50,
 		isFound: false//collectable's visablity
 	}
+	
+	collectables = [
+		collectable = {
+			x_pos: 512,
+			y_pos: 350,
+			size: 50,
+			isFound: false//collectable's visablity
+		},
+		collectable = {
+			x_pos: width / 2,
+			y_pos: 350,
+			size: 50,
+			isFound: false//collectable's visablity
+		},
+		collectable = {
+			x_pos: width / 2,
+			y_pos: 350,
+			size: 50,
+			isFound: false//collectable's visablity
+		}
+	]
 
 	//Trees in array
 	trees_x = [100, 300, 700, 100, 1400];
@@ -116,15 +139,12 @@ function draw() {
 
 	//Draw a canyon
 	drawCanyon(canyon);
+	checkCanyon(canyon);
 
-	//Draw collectable item
-	//If the distance of the collectable and the character is closer than 45 the collectable will disappear
-	if (dist(gameChar_x + 40, gameChar_y - 50, collectable.x_pos + cameraPosX, collectable.y_pos) < 45) {
-		collectable.isFound = true;
-	}
-
-	//Collectable coin
+	//Draw Collectable coin
 	drawCollectable(collectable);
+	checkCollectable(collectable);
+
 	pop();
 
 	//The game character
@@ -187,9 +207,7 @@ function draw() {
 		ellipse(gameChar_x + 110, gameChar_y - 15, 4, 8);
 		ellipse(gameChar_x + 100, gameChar_y - 15, 4, 8);
 		ellipse(gameChar_x + 105, gameChar_y - 20, 15, 10);
-	}
-
-	else if (isRight && isFalling) {//the character jumping facing the right side
+	} else if (isRight && isFalling) {//the character jumping facing the right side
 		//Body
 		fill(139, 69, 19); // brown
 		stroke(0);
@@ -247,9 +265,7 @@ function draw() {
 		ellipse(gameChar_x, gameChar_y - 15, 4, 8);
 		ellipse(gameChar_x - 10, gameChar_y - 15, 4, 8);
 		ellipse(gameChar_x - 5, gameChar_y - 20, 15, 10);
-	}
-
-	else if (isLeft) {//the character walking facing the left side
+	} else if (isLeft) {//the character walking facing the left side
 		//Body
 		fill(139, 69, 19); // brown
 		stroke(0);
@@ -312,9 +328,7 @@ function draw() {
 		ellipse(gameChar_x + 110, gameChar_y - 85, 4, 8);
 		ellipse(gameChar_x + 100, gameChar_y - 85, 4, 8);
 		ellipse(gameChar_x + 105, gameChar_y - 80, 15, 10);
-	}
-
-	else if (isRight) {//the character waling facing the right side
+	} else if (isRight) {//the character waling facing the right side
 		//Body
 		fill(139, 69, 19); //brown
 		stroke(0);
@@ -377,9 +391,7 @@ function draw() {
 		ellipse(gameChar_x - 20, gameChar_y - 85, 4, 8);
 		ellipse(gameChar_x - 30, gameChar_y - 85, 4, 8);
 		ellipse(gameChar_x - 25, gameChar_y - 80, 15, 10);
-	}
-
-	else if (isPlummeting || isFalling) {//the character jumping facing front
+	} else if (isPlummeting || isFalling) {//the character jumping facing front
 		//Body
 		fill(139, 69, 19); // brown
 		stroke(0);
@@ -436,9 +448,7 @@ function draw() {
 		ellipse(gameChar_x, gameChar_y - 15, 4, 8);
 		ellipse(gameChar_x - 10, gameChar_y - 15, 4, 8);
 		ellipse(gameChar_x - 5, gameChar_y - 20, 15, 10);
-	}
-
-	else {//the character stand facing front
+	} else {//the character stand facing front
 		// body
 		fill(139, 69, 19); // brown
 		stroke(0);
@@ -534,12 +544,7 @@ function draw() {
 		isJumping = false;
 	}
 
-	//falling into the canyon
-	if (gameChar_x + 30 > canyon.x_pos + cameraPosX && gameChar_x + 45 - cameraPosX < canyon.x_pos + canyon.width) {
-		if (isPlummeting == false) {
-			gameChar_y += 4;
-		}
-	}
+
 }
 
 function keyPressed() {
@@ -604,11 +609,27 @@ function drawCollectable(t_collectable) {
 		fill(220, 220, 140);
 		ellipse(t_collectable.x_pos + 5, t_collectable.y_pos, 10, 20);
 	}
-	
+}
+
+function checkCollectable(t_collectable) {
+	//If the distance of the collectable and the character is closer than 45 the collectable will disappear
+	if (dist(gameChar_x + 40, gameChar_y - 50, t_collectable.x_pos + cameraPosX, t_collectable.y_pos) < 45) {
+		t_collectable.isFound = true;
+	}
 }
 
 function drawCanyon(t_canyon) {
 	fill(20);
 	rect(t_canyon.x_pos, t_canyon.y_pos, t_canyon.width, width - floorPos_y);
 
+}
+
+function checkCanyon(t_canyon) {
+	//falling into the canyon
+	if (gameChar_x + 30 > t_canyon.x_pos + cameraPosX
+		&& gameChar_x + 45 <= t_canyon.x_pos + t_canyon.width + cameraPosX) {
+		if (isPlummeting == false) {
+			gameChar_y += 4;
+		}
+	}
 }
