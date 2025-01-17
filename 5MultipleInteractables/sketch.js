@@ -1,8 +1,8 @@
 /*
 Author: Joshua Song
 The Game Project
-Week 4
-Camera Moving - Mid-Term
+Task 5
+Multiple interactables
 */
 
 //Background
@@ -82,19 +82,7 @@ function draw() {
 	rect(floorPos_x, floorPos_y, width, height - floorPos_y);
 
 	//Draw clouds
-	for (var i = 0; i < cloud_x.length; i++) {
-		noStroke();
-		fill(0, 0, 0);
-		ellipse(
-			cloud_x[i], cloud_y,
-			cloud_xSize, cloud_ySize);
-		ellipse(
-			cloud_x[i] - 90, cloud_y + 10,
-			cloud_xSize - 40, cloud_ySize - 20);
-		ellipse(
-			cloud_x[i] + 120, cloud_y + 10,
-			cloud_xSize - 40, cloud_ySize - 20);
-	}
+	drawCloud();
 
 	//Draw muntains
 	for (var i = 0; i < mountains_x.length; i++) {
@@ -596,5 +584,21 @@ function keyReleased() {
 		isPlummeting = false;
 		console.log("isJumping is " + isJumping);
 		console.log("isPlummeting is " + isPlummeting);
+	}
+}
+
+function drawCloud(){
+	for (var i = 0; i < cloud_x.length; i++) {
+		noStroke();
+		fill(0, 0, 0);
+		ellipse(
+			cloud_x[i], cloud_y,
+			cloud_xSize, cloud_ySize);
+		ellipse(
+			cloud_x[i] - 90, cloud_y + 10,
+			cloud_xSize - 40, cloud_ySize - 20);
+		ellipse(
+			cloud_x[i] + 120, cloud_y + 10,
+			cloud_xSize - 40, cloud_ySize - 20);
 	}
 }
