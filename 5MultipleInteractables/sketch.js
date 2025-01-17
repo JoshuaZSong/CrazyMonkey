@@ -12,7 +12,7 @@ var floorPos_x = 0;
 var mountains_x;
 var mountains_y;
 //Canyon
-var canyon;
+var canyons;
 //Trees
 var trees_x;
 var trees_y;
@@ -20,7 +20,6 @@ var trees_y;
 var cloud_x;
 var cloud_y;
 //Collectable
-var collectable;
 var collectables;
 //Character
 var gameChar_x;
@@ -41,38 +40,42 @@ function setup() {
 	gameChar_x = width / 6;
 	gameChar_y = floorPos_y;
 
-	canyon = {
-		x_pos: width / 2 - 45,
-		y_pos: 432,
-		width: 100
-	}
+	canyons=[
+		{
+			x_pos: 500,
+			y_pos: 432,
+			width: 100
+		},
+		{
+			x_pos: 900,
+			y_pos: 432,
+			width: 100
+		},
+		{
+			x_pos: 1100,
+			y_pos: 432,
+			width: 100
+		}
+	] 
 
-
-	collectable = {
-		x_pos: 512,
-		y_pos: 350,
-		size: 50,
-		isFound: false//collectable's visablity
-	}
-	
 	collectables = [
-		collectable = {
-			x_pos: 512,
+		{
+			x_pos: 550,
 			y_pos: 350,
 			size: 50,
 			isFound: false//collectable's visablity
 		},
-		collectable = {
-			x_pos: width / 2,
+		{
+			x_pos: 950,
 			y_pos: 350,
 			size: 50,
-			isFound: false//collectable's visablity
+			isFound: false
 		},
-		collectable = {
-			x_pos: width / 2,
+		{
+			x_pos: 1150,
 			y_pos: 350,
 			size: 50,
-			isFound: false//collectable's visablity
+			isFound: false
 		}
 	]
 
@@ -138,12 +141,17 @@ function draw() {
 	}
 
 	//Draw a canyon
-	drawCanyon(canyon);
-	checkCanyon(canyon);
+	for (var i = 0; i < canyons.length; i++) {
+		drawCanyon(canyons[i]);
+	checkCanyon(canyons[i]);
+	}
+	
 
 	//Draw Collectable coin
-	drawCollectable(collectable);
-	checkCollectable(collectable);
+	for (var i = 0; i < collectables.length; i++) {
+		drawCollectable(collectables[i]);
+		checkCollectable(collectables[i]);
+	}
 
 	pop();
 
