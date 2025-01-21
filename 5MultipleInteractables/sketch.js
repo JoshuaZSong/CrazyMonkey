@@ -40,7 +40,7 @@ function setup() {
 	gameChar_x = width / 6;
 	gameChar_y = floorPos_y;
 
-	canyons=[
+	canyons = [
 		{
 			x_pos: 500,
 			y_pos: 432,
@@ -56,7 +56,7 @@ function setup() {
 			y_pos: 432,
 			width: 100
 		}
-	] 
+	]
 
 	collectables = [
 		{
@@ -143,9 +143,9 @@ function draw() {
 	//Draw a canyon
 	for (var i = 0; i < canyons.length; i++) {
 		drawCanyon(canyons[i]);
-	checkCanyon(canyons[i]);
+		checkCanyon(canyons[i]);
 	}
-	
+
 
 	//Draw Collectable coin
 	for (var i = 0; i < collectables.length; i++) {
