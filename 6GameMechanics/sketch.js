@@ -35,6 +35,8 @@ var isFrozen = false;
 var cameraPosX = 0;
 //Game Scores
 var gameScore = 0;
+//Flagpole
+var flagpole;
 
 function setup() {
 	createCanvas(1024, 576);
@@ -91,9 +93,15 @@ function setup() {
 	cloud_xSize = 180;
 	cloud_ySize = 60;
 
-	//mountain in array
+	//Mountain in array
 	mountains_x = [500, 1100, 1700];
 	mountains_y = 250;
+
+	//Flagpole
+	flagpole = {
+		isReached : true,
+		x_pos : 500
+	}
 }
 
 function draw() {
@@ -147,6 +155,9 @@ function draw() {
 		drawCanyon(canyons[i]);
 		checkCanyon(canyons[i]);
 	}
+
+	//Draw flagpole;
+	drawFlagpole();
 
 
 	//Draw Collectable coin
@@ -307,10 +318,15 @@ function checkCanyon(t_canyon) {
 }
 
 function drawScoreTable(score){
-
 	fill(255);
 	noStroke();
 	text("Score:" + score, 20, 20)
+}
+
+function drawFlagpole(){
+	strokeWeight(5);
+	stroke(250);
+	line(flagpole.x_pos,floorPos_y,flagpole.x_pos,floorPos_y - 250);
 }
 
 function drawGameChar(){
