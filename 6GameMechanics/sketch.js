@@ -158,6 +158,130 @@ function draw() {
 	pop();
 
 	//The game character
+	drawGameChar();
+
+	//The opposite position change(opposite to the background)
+	if (isLeft == true && isFrozen == false) {//when going left
+		cameraPosX += 5;
+		floorPos_x -= 5
+		//gameChar_x -=5;
+	} else if (isRight == true && isFrozen == false) {//when going right
+		cameraPosX -= 5;
+		floorPos_x += 5;
+		//gameChar_x +=5;
+	} else if (isJumping == true && isFrozen == false) {//when jumping
+		gameChar_y -= jumpHeight;
+	}
+
+	//add gravity
+	if (gameChar_y < floorPos_y) {
+		isFalling = true
+		gameChar_y += 4;//character's fallign speed
+	} else if (gameChar_y == floorPos_y) {
+		isPlummeting = false;
+		isFalling = false;
+	} else {
+		isPlummeting = false;
+		isFalling = true;
+		isFrozen = true;
+	}
+
+	//Avoid double jumping
+	if (gameChar_y < (floorPos_y - jumpHeight)) {
+		isJumping = false;
+	}
+	
+}//End of draw function
+
+function keyPressed() {
+	//Open up the console to see how these press work
+	console.log("keyPressed: " + key);
+
+	//If statements to control the animation of the character when keys are pressed.
+	if (keyCode == 37) {
+		console.log("left arrow");
+		isLeft = true;
+	} else if (keyCode == 39) {
+		console.log("right arrow");
+		isRight = true;
+	} else if ((keyCode == 38 || keyCode == 32) && isFalling == false) {
+		console.log("up arrow");
+		isJumping = true;
+	} else if (isFalling == true) {//to avoid double jumping
+		console.log("double jumps is prevented")
+	}
+}
+
+function keyReleased() {
+	//Open up the console to see how the release work
+	console.log("keyReleased: " + key);
+
+	//If statements to control the animation of the character when keys are released.
+	if (keyCode == 37) {
+		isLeft = false;
+		console.log("isLeft is " + isLeft);
+	} else if (keyCode == 39) {
+		isRight = false;
+		console.log("isRight is " + isRight);
+	} else if (keyCode == 38 || keyCode == 32) {
+		isJumping = false;
+		isPlummeting = false;
+		console.log("isJumping is " + isJumping);
+		console.log("isPlummeting is " + isPlummeting);
+	}
+}
+
+function drawCloud() {
+	for (var i = 0; i < cloud_x.length; i++) {
+		noStroke();
+		fill(0, 0, 0);
+		ellipse(
+			cloud_x[i], cloud_y,
+			cloud_xSize, cloud_ySize);
+		ellipse(
+			cloud_x[i] - 90, cloud_y + 10,
+			cloud_xSize - 40, cloud_ySize - 20);
+		ellipse(
+			cloud_x[i] + 120, cloud_y + 10,
+			cloud_xSize - 40, cloud_ySize - 20);
+	}
+}
+
+function drawCollectable(t_collectable) {
+	if (t_collectable.isFound == false) {
+		noStroke();
+		fill(250, 250, 0);
+		ellipse(t_collectable.x_pos, t_collectable.y_pos, 20, 40);
+		fill(220, 220, 140);
+		ellipse(t_collectable.x_pos + 5, t_collectable.y_pos, 10, 20);
+	}
+}
+
+function checkCollectable(t_collectable) {
+	//If the distance of the collectable and the character is closer than 45 the collectable will disappear
+	if (dist(gameChar_x + 40, gameChar_y - 50, t_collectable.x_pos + cameraPosX, t_collectable.y_pos) < 45) {
+		t_collectable.isFound = true;
+		gameScore += 1;
+	}
+}
+
+function drawCanyon(t_canyon) {
+	fill(20);
+	rect(t_canyon.x_pos, t_canyon.y_pos, t_canyon.width, width - floorPos_y);
+
+}
+
+function checkCanyon(t_canyon) {
+	//falling into the canyon
+	if (gameChar_x + 30 > t_canyon.x_pos + cameraPosX
+		&& gameChar_x + 45 <= t_canyon.x_pos + t_canyon.width + cameraPosX) {
+		if (isPlummeting == false) {
+			gameChar_y += 4;
+		}
+	}
+}
+
+function drawGameChar(){
 	push();//to make the character not moving
 	if (isLeft && isFalling) {//the character jumping and facing the left side
 		//Body
@@ -522,125 +646,4 @@ function draw() {
 		ellipse(gameChar_x - 25, gameChar_y - 80, 15, 10);
 	}
 	pop();
-
-	//The opposite position change(opposite to the background)
-	if (isLeft == true && isFrozen == false) {//when going left
-		cameraPosX += 5;
-		floorPos_x -= 5
-		//gameChar_x -=5;
-	} else if (isRight == true && isFrozen == false) {//when going right
-		cameraPosX -= 5;
-		floorPos_x += 5;
-		//gameChar_x +=5;
-	} else if (isJumping == true && isFrozen == false) {//when jumping
-		gameChar_y -= jumpHeight;
-	}
-
-	//add gravity
-	if (gameChar_y < floorPos_y) {
-		isFalling = true
-		gameChar_y += 4;//character's fallign speed
-	} else if (gameChar_y == floorPos_y) {
-		isPlummeting = false;
-		isFalling = false;
-	} else {
-		isPlummeting = false;
-		isFalling = true;
-		isFrozen = true;
-	}
-
-	//Avoid double jumping
-	if (gameChar_y < (floorPos_y - jumpHeight)) {
-		isJumping = false;
-	}
-
-
-}
-
-function keyPressed() {
-	//Open up the console to see how these press work
-	console.log("keyPressed: " + key);
-
-	//If statements to control the animation of the character when keys are pressed.
-	if (keyCode == 37) {
-		console.log("left arrow");
-		isLeft = true;
-	} else if (keyCode == 39) {
-		console.log("right arrow");
-		isRight = true;
-	} else if ((keyCode == 38 || keyCode == 32) && isFalling == false) {
-		console.log("up arrow");
-		isJumping = true;
-	} else if (isFalling == true) {//to avoid double jumping
-		console.log("double jumps is prevented")
-	}
-}
-
-function keyReleased() {
-	//Open up the console to see how the release work
-	console.log("keyReleased: " + key);
-
-	//If statements to control the animation of the character when keys are released.
-	if (keyCode == 37) {
-		isLeft = false;
-		console.log("isLeft is " + isLeft);
-	} else if (keyCode == 39) {
-		isRight = false;
-		console.log("isRight is " + isRight);
-	} else if (keyCode == 38 || keyCode == 32) {
-		isJumping = false;
-		isPlummeting = false;
-		console.log("isJumping is " + isJumping);
-		console.log("isPlummeting is " + isPlummeting);
-	}
-}
-
-function drawCloud() {
-	for (var i = 0; i < cloud_x.length; i++) {
-		noStroke();
-		fill(0, 0, 0);
-		ellipse(
-			cloud_x[i], cloud_y,
-			cloud_xSize, cloud_ySize);
-		ellipse(
-			cloud_x[i] - 90, cloud_y + 10,
-			cloud_xSize - 40, cloud_ySize - 20);
-		ellipse(
-			cloud_x[i] + 120, cloud_y + 10,
-			cloud_xSize - 40, cloud_ySize - 20);
-	}
-}
-
-function drawCollectable(t_collectable) {
-	if (t_collectable.isFound == false) {
-		noStroke();
-		fill(250, 250, 0);
-		ellipse(t_collectable.x_pos, t_collectable.y_pos, 20, 40);
-		fill(220, 220, 140);
-		ellipse(t_collectable.x_pos + 5, t_collectable.y_pos, 10, 20);
-	}
-}
-
-function checkCollectable(t_collectable) {
-	//If the distance of the collectable and the character is closer than 45 the collectable will disappear
-	if (dist(gameChar_x + 40, gameChar_y - 50, t_collectable.x_pos + cameraPosX, t_collectable.y_pos) < 45) {
-		t_collectable.isFound = true;
-		gameScore += 1;
-	}
-}
-
-function drawCanyon(t_canyon) {
-	fill(20);
-	rect(t_canyon.x_pos, t_canyon.y_pos, t_canyon.width, width - floorPos_y);
-
-}
-
-function checkCanyon(t_canyon) {
-	//falling into the canyon
-	if (gameChar_x + 30 > t_canyon.x_pos + cameraPosX
-		&& gameChar_x + 45 <= t_canyon.x_pos + t_canyon.width + cameraPosX) {
-		if (isPlummeting == false) {
-			gameChar_y += 4;
-		}
-	}
 }
