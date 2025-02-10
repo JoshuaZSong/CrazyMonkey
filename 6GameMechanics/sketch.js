@@ -151,14 +151,17 @@ function draw() {
 
 	//Draw Collectable coin
 	for (var i = 0; i < collectables.length; i++) {
-		drawCollectable(collectables[i]);
-		checkCollectable(collectables[i]);
+		if(!collectables[i].isFound){
+			drawCollectable(collectables[i]);
+			checkCollectable(collectables[i]);
+		}
 	}
 
 	pop();
 
 	//The game character
 	drawGameChar();
+	
 
 	//Score Table at left-top corner.
 	drawScoreTable(gameScore);
@@ -211,7 +214,8 @@ function draw() {
 5.checkCollectable
 6.drawCanyon
 7.checkCanyon
-8.drawGameChar
+8.drawScoreTable
+9.drawGameChar
 */
 
 function keyPressed() {
@@ -303,11 +307,10 @@ function checkCanyon(t_canyon) {
 }
 
 function drawScoreTable(score){
-	push();
-	fill();
+
+	fill(255);
 	noStroke();
 	text("Score:" + score, 20, 20)
-	pop();
 }
 
 function drawGameChar(){
