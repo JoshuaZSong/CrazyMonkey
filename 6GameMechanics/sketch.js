@@ -33,6 +33,8 @@ var jumpHeight = 100;
 var isFrozen = false;
 //Moving camera
 var cameraPosX = 0;
+//Game Scores
+var gameScore = 0;
 
 function setup() {
 	createCanvas(1024, 576);
@@ -623,6 +625,7 @@ function checkCollectable(t_collectable) {
 	//If the distance of the collectable and the character is closer than 45 the collectable will disappear
 	if (dist(gameChar_x + 40, gameChar_y - 50, t_collectable.x_pos + cameraPosX, t_collectable.y_pos) < 45) {
 		t_collectable.isFound = true;
+		gameScore += 1;
 	}
 }
 
