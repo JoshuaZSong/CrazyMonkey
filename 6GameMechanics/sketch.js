@@ -24,6 +24,7 @@ var collectables;
 //Character
 var gameChar_x;
 var gameChar_y;
+
 var isLeft = false;
 var isRight = false;
 var isFalling = false;
@@ -100,7 +101,7 @@ function setup() {
 	//Flagpole
 	flagpole = {
 		isReached : true,
-		x_pos : 500
+		x_pos : 100
 	}
 }
 
@@ -177,13 +178,10 @@ function draw() {
 	//Score Table at left-top corner.
 	drawScoreTable(gameScore);
 
-	/*Logic 
-	1.Direction
-	2.Gravity
-	3.Avoid double jumping
+	/*
+	Logic 
 	*/
 
-	//1.Direction 
 	//The opposite position change(opposite to the background)
 	if (isLeft == true && isFrozen == false) {//when going left
 		cameraPosX += 5;
@@ -197,7 +195,7 @@ function draw() {
 		gameChar_y -= jumpHeight;
 	}
 
-	//2.Gravity
+	//Gravity
 	if (gameChar_y < floorPos_y) {
 		isFalling = true
 		gameChar_y += 4;//character's fallign speed
@@ -210,10 +208,14 @@ function draw() {
 		isFrozen = true;
 	}
 
-	//3.Avoid double jumping
+	//Avoid double jumping
 	if (gameChar_y < (floorPos_y - jumpHeight)) {
 		isJumping = false;
 	}
+
+	gameChar_world_x = gameChar_x - scrollPos;
+
+
 
 }//End of draw function
 
@@ -323,10 +325,26 @@ function drawScoreTable(score){
 	text("Score:" + score, 20, 20)
 }
 
+function checkFlagpole(){
+	var d = abs(gameChar_x - flagpole.x_pos)
+	if(){
+
+	}
+}
+
 function drawFlagpole(){
+	push();
 	strokeWeight(5);
-	stroke(250);
+	stroke(0);
 	line(flagpole.x_pos,floorPos_y,flagpole.x_pos,floorPos_y - 250);
+	fill(255,0,255);
+	noStroke();
+	if(flagpole.isReached){
+		rect(flagpole.x_pos,floorPos_y - 250, 50, 50);
+	}else{
+		rect(flagpole.x_pos,floorPos_y - 50, 50, 50);
+	}
+	pop();
 }
 
 function drawGameChar(){
