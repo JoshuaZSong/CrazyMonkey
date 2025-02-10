@@ -160,6 +160,16 @@ function draw() {
 	//The game character
 	drawGameChar();
 
+	//Score Table at left-top corner.
+	drawScoreTable(gameScore);
+
+	/*Logic 
+	1.Direction
+	2.Gravity
+	3.Avoid double jumping
+	*/
+
+	//1.Direction 
 	//The opposite position change(opposite to the background)
 	if (isLeft == true && isFrozen == false) {//when going left
 		cameraPosX += 5;
@@ -173,7 +183,7 @@ function draw() {
 		gameChar_y -= jumpHeight;
 	}
 
-	//add gravity
+	//2.Gravity
 	if (gameChar_y < floorPos_y) {
 		isFalling = true
 		gameChar_y += 4;//character's fallign speed
@@ -186,12 +196,23 @@ function draw() {
 		isFrozen = true;
 	}
 
-	//Avoid double jumping
+	//3.Avoid double jumping
 	if (gameChar_y < (floorPos_y - jumpHeight)) {
 		isJumping = false;
 	}
-	
+
 }//End of draw function
+
+/* FUnctions:
+1.KeyPressed
+2.KeyReleased
+3.drawCloud
+4.drawCollectable
+5.checkCollectable
+6.drawCanyon
+7.checkCanyon
+8.drawGameChar
+*/
 
 function keyPressed() {
 	//Open up the console to see how these press work
@@ -279,6 +300,14 @@ function checkCanyon(t_canyon) {
 			gameChar_y += 4;
 		}
 	}
+}
+
+function drawScoreTable(score){
+	push();
+	fill();
+	noStroke();
+	text("Score:" + score, 20, 20)
+	pop();
 }
 
 function drawGameChar(){
