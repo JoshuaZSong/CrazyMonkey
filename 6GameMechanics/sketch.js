@@ -178,9 +178,7 @@ function draw() {
 	//Score Table at left-top corner.
 	drawScoreTable(gameScore);
 
-	/*
-	Logic 
-	*/
+
 
 	//The opposite position change(opposite to the background)
 	if (isLeft == true && isFrozen == false) {//when going left
@@ -213,22 +211,24 @@ function draw() {
 		isJumping = false;
 	}
 
-	gameChar_world_x = gameChar_x - scrollPos;
+	checkFlagpole();
+
+	gameChar_world_x = gameChar_x - cameraPosX;
 
 
 
 }//End of draw function
 
 /* FUnctions:
-1.KeyPressed
-2.KeyReleased
-3.drawCloud
-4.drawCollectable
-5.checkCollectable
-6.drawCanyon
-7.checkCanyon
-8.drawScoreTable
-9.drawGameChar
+KeyPressed
+KeyReleased
+drawCloud
+drawCollectable
+checkCollectable
+drawCanyon
+checkCanyon
+drawScoreTable
+drawGameChar
 */
 
 function keyPressed() {
@@ -326,9 +326,11 @@ function drawScoreTable(score){
 }
 
 function checkFlagpole(){
-	var d = abs(gameChar_x - flagpole.x_pos)
-	if(){
-
+	var d = abs(gameChar_world_x - flagpole.x_pos)
+	if(d <= 15){
+		flagpole.isReached = false;
+	}else{
+		flagpole.isReached = true;
 	}
 }
 
