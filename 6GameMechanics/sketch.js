@@ -23,6 +23,7 @@ var cloud_y;
 var collectables;
 //Character
 var gameChar_x;
+var gameChar_world_x;
 var gameChar_y;
 
 var isLeft = false;
@@ -327,7 +328,8 @@ function drawScoreTable(score){
 
 function checkFlagpole(){
 	var d = abs(gameChar_world_x - flagpole.x_pos)
-	if(d <= 15){
+	console.log(d)
+	if(d <= 55){
 		flagpole.isReached = false;
 	}else{
 		flagpole.isReached = true;
