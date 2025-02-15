@@ -25,6 +25,7 @@ var collectables;
 var gameChar_x;
 var gameChar_world_x;
 var gameChar_y;
+var lives;
 
 var isLeft = false;
 var isRight = false;
@@ -45,6 +46,7 @@ function setup() {
 	floorPos_y = height * 3 / 4;
 	gameChar_x = width / 6;
 	gameChar_y = floorPos_y;
+	lives = 3;
 
 	canyons = [
 		{
