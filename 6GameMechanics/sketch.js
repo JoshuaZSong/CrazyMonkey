@@ -353,6 +353,10 @@ function drawFlagpole(){
 	pop();
 }
 
+function checkPlayerDie(){
+	
+}
+
 function drawGameChar(){
 	push();//to make the character not moving
 	if (isLeft && isFalling) {//the character jumping and facing the left side
