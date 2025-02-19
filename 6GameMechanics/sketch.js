@@ -7,7 +7,7 @@ Multiple interactables
 
 //Background
 var floorPos_y;
-var floorPos_x = 0;
+var floorPos_x;
 //nountain
 var mountains_x;
 var mountains_y;
@@ -27,24 +27,26 @@ var gameChar_world_x;
 var gameChar_y;
 var lives;
 
-var isLeft = false;
-var isRight = false;
-var isFalling = false;
-var isPlummeting = false;
-var isJumping = false;
-var jumpHeight = 100;
-var isFrozen = false;
+var isLeft;
+var isRight;
+var isFalling;
+var isPlummeting;
+var isJumping;
+var jumpHeight;
+var isFrozen;
 //Moving camera
-var cameraPosX = 0;
+var cameraPosX;
 //Game Scores
-var gameScore = 0;
+var gameScore;
 //Flagpole
 var flagpole;
 
 function setup() {
 	createCanvas(1024, 576);
+	floorPos_y = height * 3 / 4;
+	gameScore = 0;
 	lives = 3;
-	
+
 
 	startGame();
 }
@@ -107,7 +109,7 @@ function draw() {
 
 	//Draw Collectable coin
 	for (var i = 0; i < collectables.length; i++) {
-		if(!collectables[i].isFound){
+		if (!collectables[i].isFound) {
 			drawCollectable(collectables[i]);
 			checkCollectable(collectables[i]);
 		}
@@ -117,7 +119,7 @@ function draw() {
 
 	//The game character
 	drawGameChar();
-	
+
 
 	//Score Table at left-top corner.
 	drawScoreTable(gameScore);
@@ -266,58 +268,70 @@ function checkCanyon(t_canyon) {
 	}
 }
 
-function drawScoreTable(score){
+function drawScoreTable(score) {
 	fill(255);
 	noStroke();
 	text("Score:" + score, 20, 20)
 }
 
-function drawlife(lives){
-	fill(255);
-	noStroke();
-	text("lives:" + lives, 20, 40)
+function drawlife(lives) {
+	for (let i = 0; i < lives; i++) {
+		fill(255, 0, 0);
+		ellipse(30 + i * 30, 40, 20, 20);
+	  }
 }
 
-function checkFlagpole(){
+function checkFlagpole() {
 	var d = abs(gameChar_world_x - flagpole.x_pos)
 	console.log(d)
-	if(d <= 55){
+	if (d <= 55) {
 		flagpole.isReached = false;
-	}else{
+	} else {
 		flagpole.isReached = true;
 	}
 }
 
-function drawFlagpole(){
+function drawFlagpole() {
 	push();
 	strokeWeight(5);
 	stroke(0);
-	line(flagpole.x_pos,floorPos_y,flagpole.x_pos,floorPos_y - 250);
-	fill(255,0,255);
+	line(flagpole.x_pos, floorPos_y, flagpole.x_pos, floorPos_y - 250);
+	fill(255, 0, 255);
 	noStroke();
-	if(flagpole.isReached){
-		rect(flagpole.x_pos,floorPos_y - 250, 50, 50);
-	}else{
-		rect(flagpole.x_pos,floorPos_y - 50, 50, 50);
+	if (flagpole.isReached) {
+		rect(flagpole.x_pos, floorPos_y - 250, 50, 50);
+	} else {
+		rect(flagpole.x_pos, floorPos_y - 50, 50, 50);
 	}
 	pop();
 }
 
-function checkPlayerDie(){
-	if(gameChar_y > height){
-		lives --;
-		if(lives > 0){
+function checkPlayerDie() {
+	if (gameChar_y > height) {
+		if (lives > 0) {
+			lives--;
 			startGame();
-		}else{
+		} else {
 			text("Game Over!", width / 2, height / 2);
 		}
 	}
 }
 
-function startGame(){
-	floorPos_y = height * 3 / 4;
+function startGame() {
+	floorPos_x = 0
 	gameChar_x = width / 6;
 	gameChar_y = floorPos_y;
+	isLeft = false;
+	isRight = false;
+	isFalling = false;
+	isPlummeting = false;
+	isJumping = false;
+	jumpHeight = 100;
+	isFrozen = false;
+	cameraPosX = 0;
+
+	
+
 	canyons = [
 		{
 			x_pos: 500,
@@ -373,13 +387,13 @@ function startGame(){
 
 	//Flagpole
 	flagpole = {
-		isReached : true,
-		x_pos : 100
+		isReached: true,
+		x_pos: 100
 	}
 }
 
 
-function drawGameChar(){
+function drawGameChar() {
 	push();//to make the character not moving
 	if (isLeft && isFalling) {//the character jumping and facing the left side
 		//Body
