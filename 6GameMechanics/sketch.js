@@ -47,6 +47,26 @@ function setup() {
 	gameScore = 0;
 	lives = 3;
 
+	collectables = [
+		{
+			x_pos: 550,
+			y_pos: 350,
+			size: 50,
+			isFound: false//collectable's visablity
+		},
+		{
+			x_pos: 950,
+			y_pos: 350,
+			size: 50,
+			isFound: false
+		},
+		{
+			x_pos: 1150,
+			y_pos: 350,
+			size: 50,
+			isFound: false
+		}
+	]
 
 	startGame();
 }
@@ -285,9 +305,9 @@ function checkFlagpole() {
 	var d = abs(gameChar_world_x - flagpole.x_pos)
 	console.log(d)
 	if (d <= 55) {
-		flagpole.isReached = false;
-	} else {
 		flagpole.isReached = true;
+	} else {
+		flagpole.isReached = false;
 	}
 }
 
@@ -299,20 +319,24 @@ function drawFlagpole() {
 	fill(255, 0, 255);
 	noStroke();
 	if (flagpole.isReached) {
-		rect(flagpole.x_pos, floorPos_y - 250, 50, 50);
-	} else {
 		rect(flagpole.x_pos, floorPos_y - 50, 50, 50);
+		text("Level Completed!", width / 2, height / 2);
+		console.log("Level Completed!")
+	} else {
+		rect(flagpole.x_pos, floorPos_y - 250, 50, 50);
 	}
 	pop();
 }
 
 function checkPlayerDie() {
 	if (gameChar_y > height) {
-		if (lives > 0) {
+		if (lives > 1) {
 			lives--;
+			console.log("Live is " + lives )
 			startGame();
 		} else {
 			text("Game Over!", width / 2, height / 2);
+			console.log("Game over")
 		}
 	}
 }
@@ -350,26 +374,6 @@ function startGame() {
 		}
 	]
 
-	collectables = [
-		{
-			x_pos: 550,
-			y_pos: 350,
-			size: 50,
-			isFound: false//collectable's visablity
-		},
-		{
-			x_pos: 950,
-			y_pos: 350,
-			size: 50,
-			isFound: false
-		},
-		{
-			x_pos: 1150,
-			y_pos: 350,
-			size: 50,
-			isFound: false
-		}
-	]
 
 	//Trees in array
 	trees_x = [100, 300, 700, 100, 1400];
@@ -388,7 +392,7 @@ function startGame() {
 	//Flagpole
 	flagpole = {
 		isReached: true,
-		x_pos: 100
+		x_pos: 1500
 	}
 }
 
