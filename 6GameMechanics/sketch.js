@@ -318,15 +318,16 @@ function drawFlagpole() {
 	line(flagpole.x_pos, floorPos_y, flagpole.x_pos, floorPos_y - 250);
 	fill(255, 0, 255);
 	noStroke();
-	pop();
 	if (flagpole.isReached) {
 		rect(flagpole.x_pos, floorPos_y - 50, 50, 50);
-		text("Level Completed!", width / 2, height / 2);
+		text("Level Completed!", width / 2 - cameraPosX, height / 2);
+		isFrozen = true;
 		console.log("Level Completed!")
 	} else {
+		strokeWeight(5);
 		rect(flagpole.x_pos, floorPos_y - 250, 50, 50);
 	}
-	
+	pop();
 }
 
 function checkPlayerDie() {
