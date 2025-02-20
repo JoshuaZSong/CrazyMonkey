@@ -167,10 +167,10 @@ function draw() {
 		isFalling = true
 		gameChar_y += 4;//character's fallign speed
 	} else if (gameChar_y == floorPos_y) {
-		isPlummeting = false;
+		isPlummeting = true;
 		isFalling = false;
 	} else {
-		isPlummeting = false;
+		isPlummeting = true;
 		isFalling = true;
 		isFrozen = true;
 	}
@@ -282,7 +282,7 @@ function checkCanyon(t_canyon) {
 	//falling into the canyon
 	if (gameChar_x + 30 > t_canyon.x_pos + cameraPosX
 		&& gameChar_x + 45 < t_canyon.x_pos + t_canyon.width + cameraPosX) {
-		if (isPlummeting == false) {
+		if (isPlummeting == true) {
 			gameChar_y += 4;
 		}
 	}
@@ -320,6 +320,7 @@ function drawFlagpole() {
 	if (flagpole.isReached) {
 		rect(flagpole.x_pos, floorPos_y - 50, 50, 50);
 		text("Level Completed!", width / 2 - cameraPosX, height / 2);
+		isFrozen = true
 		console.log("Level Completed!")
 	} else {
 		strokeWeight(5);
