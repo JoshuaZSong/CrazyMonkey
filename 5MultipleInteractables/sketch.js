@@ -584,7 +584,8 @@ function keyReleased() {
 		console.log("isLeft is " + isLeft);
 	} else if (keyCode == 39) {
 		isRight = false;
-		console.log("isRight is " + isRight);
+		console.log("isRight is " + isRight
+		);
 	} else if (keyCode == 38 || keyCode == 32) {
 		isJumping = false;
 		isPlummeting = false;

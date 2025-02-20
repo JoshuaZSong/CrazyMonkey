@@ -150,40 +150,37 @@ function draw() {
 	checkFlagpole();
 
 	//The opposite position change(opposite to the background)
-	while (isFrozen == false)
-		if (isLeft == true && isFrozen == false) {//when going left
+	if (isFrozen == false) {
+		if (isLeft == true ) {//when going left
 			cameraPosX += 5;
 			floorPos_x -= 5
 			//gameChar_x -=5;
-		} else if (isRight == true && isFrozen == false) {//when going right
+		} else if (isRight == true) {//when going right
 			cameraPosX -= 5;
 			floorPos_x += 5;
 			//gameChar_x +=5;
-		} else if (isJumping == true && isFrozen == false) {//when jumping
+		} else if (isJumping == true) {//when jumping
 			gameChar_y -= jumpHeight;
-		} else if (isPlummeting == true && isFalling == true && isFrozen == false) {//when jumping
-			gameChar_y += 4;//character's fallign speed
 		}
+	}
 
 	//Gravity
 	if (gameChar_y < floorPos_y) {
 		isFalling = true
-		isPlummeting = false;
-		isJumping = false
-		
+		gameChar_y += 4;//character's fallign speed
 	} else if (gameChar_y == floorPos_y) {
 		isPlummeting = false;
 		isFalling = false;
 	} else {
-		isPlummeting = true;
+		isPlummeting = false;
 		isFalling = true;
 		isFrozen = true;
 	}
 
 	//Avoid double jumping
-	// if (gameChar_y < (floorPos_y - jumpHeight)) {
-	// 	isJumping = false;
-	// }
+	if (gameChar_y < (floorPos_y - jumpHeight)) {
+		isJumping = false;
+	}
 
 	gameChar_world_x = gameChar_x - cameraPosX;
 }//End of draw function
@@ -211,11 +208,11 @@ function keyPressed() {
 	} else if (keyCode == 39) {
 		console.log("right arrow");
 		isRight = true;
-	} else if ((keyCode == 38 || keyCode == 32) && isJumping == false) {
-		isJumping = true
-		isFalling = true;
+	} else if ((keyCode == 38 || keyCode == 32) && isFalling == false) {
 		console.log("up arrow");
-
+		isJumping = true;
+	} else if (isFalling == true) {//to avoid double jumping
+		console.log("double jumps is prevented")
 	}
 }
 
@@ -229,11 +226,13 @@ function keyReleased() {
 		console.log("isLeft is " + isLeft);
 	} else if (keyCode == 39) {
 		isRight = false;
-		console.log("isRight is " + isRight);
+		console.log("isRight is " + isRight
+		);
 	} else if (keyCode == 38 || keyCode == 32) {
 		isJumping = false;
 		isPlummeting = true;
-		isFalling = true;
+		console.log("isJumping is " + isJumping);
+		console.log("isPlummeting is " + isPlummeting);
 	}
 }
 
