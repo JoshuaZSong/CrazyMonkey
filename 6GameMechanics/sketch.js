@@ -641,7 +641,7 @@ function drawGameChar() {
 		ellipse(gameChar_x - 20, gameChar_y - 85, 4, 8);
 		ellipse(gameChar_x - 30, gameChar_y - 85, 4, 8);
 		ellipse(gameChar_x - 25, gameChar_y - 80, 15, 10);
-	} else if (isPlummeting || isFalling) {//the character jumping facing front
+	} else if (isFalling) {//the character jumping facing front
 		//Body
 		fill(139, 69, 19); // brown
 		stroke(0);
