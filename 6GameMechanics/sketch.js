@@ -161,6 +161,7 @@ function draw() {
 			//gameChar_x +=5;
 		} else if (isJumping == true) {//when jumping
 			gameChar_y -= jumpHeight;
+			isPlummeting = false;
 		}
 	}
 
@@ -172,13 +173,16 @@ function draw() {
 			isJumping = false;
 		}
 	} else if (gameChar_y == floorPos_y) {
-		isPlummeting = true;
+		isPlummeting = false;
 		isFalling = false;
 	} else {
 		isPlummeting = true;
-		isFalling = true;
-		isFrozen = true;
-		console.log("Frozen by Gravity")
+		isFalling = false;
+		if(!isJumping){
+			isFrozen = true;
+		console.log("Frozen by Gravity" + isPlummeting + isFalling + isFrozen + (gameChar_x + 30) + "=" + (cameraPosX + 500) + "," 
+		+ (gameChar_x + 45) + "=" + (cameraPosX + 600))
+		}
 	}
 
 	gameChar_world_x = gameChar_x - cameraPosX;
@@ -231,9 +235,6 @@ function keyReleased() {
 		);
 	} else if (keyCode == 38 || keyCode == 32) {
 		isJumping = false;
-		isPlummeting = true;
-		console.log("isJumping is " + isJumping);
-		console.log("isPlummeting is " + isPlummeting);
 	}
 }
 
@@ -279,9 +280,10 @@ function drawCanyon(t_canyon) {
 
 function checkCanyon(t_canyon) {
 	//falling into the canyon
-	if (gameChar_x + 30 > t_canyon.x_pos + cameraPosX
-		&& gameChar_x + 37 < t_canyon.x_pos + t_canyon.width + cameraPosX) {
-		if (isPlummeting == true) {
+	if (gameChar_x + 35 >= t_canyon.x_pos + cameraPosX
+		&& gameChar_x + 40 <= t_canyon.x_pos + t_canyon.width + cameraPosX) {
+		console.log("canyon is " + isPlummeting)
+		if (!isFalling) {
 			gameChar_y += 4;
 		}
 	}
@@ -402,7 +404,7 @@ function startGame() {
 
 function drawGameChar() {
 	push();//to make the character not moving
-	if (isLeft && isFalling) {//the character jumping and facing the left side
+	if (isLeft && (isFalling || isPlummeting)) {//the character jumping and facing the left side
 		//Body
 		fill(139, 69, 19); //brown
 		stroke(0);
@@ -460,7 +462,7 @@ function drawGameChar() {
 		ellipse(gameChar_x + 110, gameChar_y - 15, 4, 8);
 		ellipse(gameChar_x + 100, gameChar_y - 15, 4, 8);
 		ellipse(gameChar_x + 105, gameChar_y - 20, 15, 10);
-	} else if (isRight && isFalling) {//the character jumping facing the right side
+	} else if (isRight && (isFalling || isPlummeting)) {//the character jumping facing the right side
 		//Body
 		fill(139, 69, 19); // brown
 		stroke(0);
@@ -644,7 +646,7 @@ function drawGameChar() {
 		ellipse(gameChar_x - 20, gameChar_y - 85, 4, 8);
 		ellipse(gameChar_x - 30, gameChar_y - 85, 4, 8);
 		ellipse(gameChar_x - 25, gameChar_y - 80, 15, 10);
-	} else if (isFalling) {//the character jumping facing front
+	} else if (isFalling || isPlummeting) {//the character jumping facing front
 		//Body
 		fill(139, 69, 19); // brown
 		stroke(0);
