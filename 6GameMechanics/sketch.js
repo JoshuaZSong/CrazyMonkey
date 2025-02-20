@@ -147,7 +147,7 @@ function draw() {
 
 	checkPlayerDie();
 
-
+	checkFlagpole();
 
 	//The opposite position change(opposite to the background)
 	if (isLeft == true && isFrozen == false) {//when going left
@@ -180,7 +180,7 @@ function draw() {
 		isJumping = false;
 	}
 
-	checkFlagpole();
+	
 
 	gameChar_world_x = gameChar_x - cameraPosX;
 
@@ -281,7 +281,7 @@ function drawCanyon(t_canyon) {
 function checkCanyon(t_canyon) {
 	//falling into the canyon
 	if (gameChar_x + 30 > t_canyon.x_pos + cameraPosX
-		&& gameChar_x + 45 <= t_canyon.x_pos + t_canyon.width + cameraPosX) {
+		&& gameChar_x + 45 < t_canyon.x_pos + t_canyon.width + cameraPosX) {
 		if (isPlummeting == false) {
 			gameChar_y += 4;
 		}
@@ -321,7 +321,6 @@ function drawFlagpole() {
 	if (flagpole.isReached) {
 		rect(flagpole.x_pos, floorPos_y - 50, 50, 50);
 		text("Level Completed!", width / 2 - cameraPosX, height / 2);
-		isFrozen = true;
 		console.log("Level Completed!")
 	} else {
 		strokeWeight(5);
@@ -337,6 +336,7 @@ function checkPlayerDie() {
 			console.log("Live is " + lives )
 			startGame();
 		} else {
+			lives--;
 			text("Game Over!", width / 2, height / 2);
 			console.log("Game over")
 		}
@@ -355,8 +355,6 @@ function startGame() {
 	jumpHeight = 100;
 	isFrozen = false;
 	cameraPosX = 0;
-
-	
 
 	canyons = [
 		{
