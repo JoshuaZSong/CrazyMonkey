@@ -150,27 +150,29 @@ function draw() {
 	checkFlagpole();
 
 	//The opposite position change(opposite to the background)
-	if (isLeft == true && isFrozen == false) {//when going left
-		cameraPosX += 5;
-		floorPos_x -= 5
-		//gameChar_x -=5;
-	} else if (isRight == true && isFrozen == false) {//when going right
-		cameraPosX -= 5;
-		floorPos_x += 5;
-		//gameChar_x +=5;
-	} else if (isJumping == true && isFrozen == false) {//when jumping
-		gameChar_y -= jumpHeight;
-	}
+	while (isFrozen == false)
+		if (isLeft == true && isFrozen == false) {//when going left
+			cameraPosX += 5;
+			floorPos_x -= 5
+			//gameChar_x -=5;
+		} else if (isRight == true && isFrozen == false) {//when going right
+			cameraPosX -= 5;
+			floorPos_x += 5;
+			//gameChar_x +=5;
+		} else if (isJumping == true && isFrozen == false) {//when jumping
+			gameChar_y -= jumpHeight;
+		} else if (isPlummeting == true && isFalling == true && isFrozen == false) {//when jumping
+			gameChar_y += 4;//character's fallign speed
+		}
 
 	//Gravity
 	if (gameChar_y < floorPos_y) {
 		isFalling = true
 		isPlummeting = false;
-		while(gameChar_y < (floorPos_y - jumpHeight)){
-			gameChar_y += 4;//character's fallign speed
-		}
-	}else if (gameChar_y == floorPos_y) {
-		isPlummeting = true;
+		isJumping = false
+		
+	} else if (gameChar_y == floorPos_y) {
+		isPlummeting = false;
 		isFalling = false;
 	} else {
 		isPlummeting = true;
@@ -183,12 +185,7 @@ function draw() {
 	// 	isJumping = false;
 	// }
 
-
-
 	gameChar_world_x = gameChar_x - cameraPosX;
-
-
-
 }//End of draw function
 
 /* Functions:
@@ -214,11 +211,11 @@ function keyPressed() {
 	} else if (keyCode == 39) {
 		console.log("right arrow");
 		isRight = true;
-	} else if ((keyCode == 38 || keyCode == 32) && isFalling == false) {
+	} else if ((keyCode == 38 || keyCode == 32) && isJumping == false) {
 		isJumping = true
 		isFalling = true;
 		console.log("up arrow");
-		
+
 	}
 }
 
