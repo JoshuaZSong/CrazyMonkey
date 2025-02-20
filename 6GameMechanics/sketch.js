@@ -158,15 +158,17 @@ function draw() {
 		cameraPosX -= 5;
 		floorPos_x += 5;
 		//gameChar_x +=5;
-	} else if (isJumping == true && isFrozen == false) {//when jumping
+	} else if (isJumping == false && isFrozen == false) {//when jumping
 		gameChar_y -= jumpHeight;
 	}
 
 	//Gravity
 	if (gameChar_y < floorPos_y) {
 		isFalling = true
+		isJumping = true;
 		gameChar_y += 4;//character's fallign speed
 	} else if (gameChar_y == floorPos_y) {
+		isJumping = false;
 		isPlummeting = true;
 		isFalling = false;
 	} else {
@@ -211,7 +213,7 @@ function keyPressed() {
 	} else if (keyCode == 39) {
 		console.log("right arrow");
 		isRight = true;
-	} else if ((keyCode == 38 || keyCode == 32) && isFalling == false) {
+	} else if ((keyCode == 38 || keyCode == 32) && isFalling == false && isJumping == falses) {
 		console.log("up arrow");
 		isJumping = true;
 	} else if (isFalling == true) {//to avoid double jumping
@@ -231,7 +233,6 @@ function keyReleased() {
 		isRight = false;
 		console.log("isRight is " + isRight);
 	} else if (keyCode == 38 || keyCode == 32) {
-		isJumping = false;
 		isPlummeting = false;
 		console.log("isJumping is " + isJumping);
 		console.log("isPlummeting is " + isPlummeting);
@@ -317,16 +318,18 @@ function drawFlagpole() {
 	line(flagpole.x_pos, floorPos_y, flagpole.x_pos, floorPos_y - 250);
 	fill(255, 0, 255);
 	noStroke();
+	pop();
+	noStroke();
+	fill(255, 0, 255);
 	if (flagpole.isReached) {
 		rect(flagpole.x_pos, floorPos_y - 50, 50, 50);
 		text("Level Completed!", width / 2 - cameraPosX, height / 2);
-		isFrozen = true
 		console.log("Level Completed!")
 	} else {
-		strokeWeight(5);
+	
 		rect(flagpole.x_pos, floorPos_y - 250, 50, 50);
 	}
-	pop();
+	
 }
 
 function checkPlayerDie() {
@@ -392,7 +395,7 @@ function startGame() {
 	//Flagpole
 	flagpole = {
 		isReached: false,
-		x_pos: 1500
+		x_pos: 100
 	}
 }
 
