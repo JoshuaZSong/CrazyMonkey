@@ -178,6 +178,7 @@ function draw() {
 		isPlummeting = true;
 		isFalling = true;
 		isFrozen = true;
+		console.log("Frozen by Gravity")
 	}
 
 	gameChar_world_x = gameChar_x - cameraPosX;
@@ -280,7 +281,7 @@ function checkCanyon(t_canyon) {
 	//falling into the canyon
 	if (gameChar_x + 30 > t_canyon.x_pos + cameraPosX
 		&& gameChar_x + 37 < t_canyon.x_pos + t_canyon.width + cameraPosX) {
-		if (isPlummeting == true || isFalling == true) {
+		if (isPlummeting == true) {
 			gameChar_y += 4;
 		}
 	}
@@ -304,6 +305,7 @@ function checkFlagpole() {
 	if (d <= 55) {
 		flagpole.isReached = true;
 		isFrozen = true
+		console.log("Frozen by Wining")
 	} else {
 		flagpole.isReached = false;
 	}
