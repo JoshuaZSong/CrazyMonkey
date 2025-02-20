@@ -278,9 +278,9 @@ function drawCanyon(t_canyon) {
 
 function checkCanyon(t_canyon) {
 	//falling into the canyon
-	if (gameChar_x + 37 > t_canyon.x_pos + cameraPosX
+	if (gameChar_x + 30 > t_canyon.x_pos + cameraPosX
 		&& gameChar_x + 37 < t_canyon.x_pos + t_canyon.width + cameraPosX) {
-		if (isPlummeting == true) {
+		if (isPlummeting == true || isFalling == true) {
 			gameChar_y += 4;
 		}
 	}
@@ -360,17 +360,17 @@ function startGame() {
 	canyons = [
 		{
 			x_pos: 500,
-			y_pos: 432,
+			y_pos: floorPos_y,
 			width: 100
 		},
 		{
 			x_pos: 900,
-			y_pos: 432,
+			y_pos: floorPos_y,
 			width: 100
 		},
 		{
 			x_pos: 1100,
-			y_pos: 432,
+			y_pos: floorPos_y,
 			width: 100
 		}
 	]
