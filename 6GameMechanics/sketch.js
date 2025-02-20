@@ -158,17 +158,19 @@ function draw() {
 		cameraPosX -= 5;
 		floorPos_x += 5;
 		//gameChar_x +=5;
-	} else if (isJumping == false && isFrozen == false) {//when jumping
+	} else if (isJumping == true && isFrozen == false && isFalling == false) {//when jumping
 		gameChar_y -= jumpHeight;
 	}
 
 	//Gravity
 	if (gameChar_y < floorPos_y) {
 		isFalling = true
-		isJumping = true;
+		isPlummeting = true;
+	} else if (gameChar_y == jumpHeight) {
+		isPlummeting = true;
+		isFalling = false;
 		gameChar_y += 4;//character's fallign speed
-	} else if (gameChar_y == floorPos_y) {
-		isJumping = false;
+	}else if (gameChar_y == floorPos_y) {
 		isPlummeting = true;
 		isFalling = false;
 	} else {
@@ -178,11 +180,11 @@ function draw() {
 	}
 
 	//Avoid double jumping
-	if (gameChar_y < (floorPos_y - jumpHeight)) {
-		isJumping = false;
-	}
+	// if (gameChar_y < (floorPos_y - jumpHeight)) {
+	// 	isJumping = false;
+	// }
 
-	
+
 
 	gameChar_world_x = gameChar_x - cameraPosX;
 
@@ -213,11 +215,11 @@ function keyPressed() {
 	} else if (keyCode == 39) {
 		console.log("right arrow");
 		isRight = true;
-	} else if ((keyCode == 38 || keyCode == 32) && isFalling == false && isJumping == falses) {
+	} else if ((keyCode == 38 || keyCode == 32) && isFalling == false) {
+		isJumping = true
+		isFalling = true;
 		console.log("up arrow");
-		isJumping = true;
-	} else if (isFalling == true) {//to avoid double jumping
-		console.log("double jumps is prevented")
+		
 	}
 }
 
@@ -233,9 +235,9 @@ function keyReleased() {
 		isRight = false;
 		console.log("isRight is " + isRight);
 	} else if (keyCode == 38 || keyCode == 32) {
-		isPlummeting = false;
-		console.log("isJumping is " + isJumping);
-		console.log("isPlummeting is " + isPlummeting);
+		isJumping = false;
+		isPlummeting = true;
+		isFalling = true;
 	}
 }
 
@@ -299,7 +301,7 @@ function drawlife(lives) {
 	for (let i = 0; i < lives; i++) {
 		fill(255, 0, 0);
 		ellipse(30 + i * 30, 40, 20, 20);
-	  }
+	}
 }
 
 function checkFlagpole() {
@@ -326,17 +328,17 @@ function drawFlagpole() {
 		text("Level Completed!", width / 2 - cameraPosX, height / 2);
 		console.log("Level Completed!")
 	} else {
-	
+
 		rect(flagpole.x_pos, floorPos_y - 250, 50, 50);
 	}
-	
+
 }
 
 function checkPlayerDie() {
 	if (gameChar_y > height) {
 		if (lives > 1) {
 			lives--;
-			console.log("Live is " + lives )
+			console.log("Live is " + lives)
 			startGame();
 		} else {
 			lives--;
