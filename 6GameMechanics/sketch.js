@@ -169,10 +169,10 @@ function draw() {
 		isFalling = true
 		gameChar_y += 4;//character's fallign speed
 	} else if (gameChar_y == floorPos_y) {
-		isPlummeting = false;
+		isPlummeting = true;
 		isFalling = false;
 	} else {
-		isPlummeting = false;
+		isPlummeting = true;
 		isFalling = true;
 		isFrozen = true;
 	}
