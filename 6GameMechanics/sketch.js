@@ -151,7 +151,7 @@ function draw() {
 
 	//The opposite position change(opposite to the background)
 	if (isFrozen == false) {
-		if (isLeft == true ) {//when going left
+		if (isLeft == true) {//when going left
 			cameraPosX += 5;
 			floorPos_x -= 5
 			//gameChar_x -=5;
@@ -168,6 +168,9 @@ function draw() {
 	if (gameChar_y < floorPos_y) {
 		isFalling = true
 		gameChar_y += 4;//character's fallign speed
+		if (gameChar_y < (floorPos_y - jumpHeight)) {//Avoid double jumping
+			isJumping = false;
+		}
 	} else if (gameChar_y == floorPos_y) {
 		isPlummeting = true;
 		isFalling = false;
@@ -175,11 +178,6 @@ function draw() {
 		isPlummeting = true;
 		isFalling = true;
 		isFrozen = true;
-	}
-
-	//Avoid double jumping
-	if (gameChar_y < (floorPos_y - jumpHeight)) {
-		isJumping = false;
 	}
 
 	gameChar_world_x = gameChar_x - cameraPosX;
@@ -202,17 +200,19 @@ function keyPressed() {
 	console.log("keyPressed: " + key);
 
 	//If statements to control the animation of the character when keys are pressed.
-	if (keyCode == 37) {
-		console.log("left arrow");
-		isLeft = true;
-	} else if (keyCode == 39) {
-		console.log("right arrow");
-		isRight = true;
-	} else if ((keyCode == 38 || keyCode == 32) && isFalling == false) {
-		console.log("up arrow");
-		isJumping = true;
-	} else if (isFalling == true) {//to avoid double jumping
-		console.log("double jumps is prevented")
+	if (isFrozen == false) {
+		if (keyCode == 37) {
+			console.log("left arrow");
+			isLeft = true;
+		} else if (keyCode == 39) {
+			console.log("right arrow");
+			isRight = true;
+		} else if ((keyCode == 38 || keyCode == 32) && isFalling == false) {
+			console.log("up arrow");
+			isJumping = true;
+		} else if (isFalling == true) {//to avoid double jumping
+			console.log("double jumps is prevented")
+		}
 	}
 }
 
@@ -278,8 +278,8 @@ function drawCanyon(t_canyon) {
 
 function checkCanyon(t_canyon) {
 	//falling into the canyon
-	if (gameChar_x + 30 > t_canyon.x_pos + cameraPosX
-		&& gameChar_x + 45 < t_canyon.x_pos + t_canyon.width + cameraPosX) {
+	if (gameChar_x + 37 > t_canyon.x_pos + cameraPosX
+		&& gameChar_x + 37 < t_canyon.x_pos + t_canyon.width + cameraPosX) {
 		if (isPlummeting == true) {
 			gameChar_y += 4;
 		}
@@ -303,6 +303,7 @@ function checkFlagpole() {
 	var d = abs(gameChar_world_x - flagpole.x_pos)
 	if (d <= 55) {
 		flagpole.isReached = true;
+		isFrozen = true
 	} else {
 		flagpole.isReached = false;
 	}
@@ -392,7 +393,7 @@ function startGame() {
 	//Flagpole
 	flagpole = {
 		isReached: false,
-		x_pos: 100
+		x_pos: 1500
 	}
 }
 
