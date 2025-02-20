@@ -158,18 +158,17 @@ function draw() {
 		cameraPosX -= 5;
 		floorPos_x += 5;
 		//gameChar_x +=5;
-	} else if (isJumping == true && isFrozen == false && isFalling == false) {//when jumping
+	} else if (isJumping == true && isFrozen == false) {//when jumping
 		gameChar_y -= jumpHeight;
 	}
 
 	//Gravity
 	if (gameChar_y < floorPos_y) {
 		isFalling = true
-		isPlummeting = true;
-	} else if (gameChar_y == jumpHeight) {
-		isPlummeting = true;
-		isFalling = false;
-		gameChar_y += 4;//character's fallign speed
+		isPlummeting = false;
+		while(gameChar_y < (floorPos_y - jumpHeight)){
+			gameChar_y += 4;//character's fallign speed
+		}
 	}else if (gameChar_y == floorPos_y) {
 		isPlummeting = true;
 		isFalling = false;
@@ -192,7 +191,7 @@ function draw() {
 
 }//End of draw function
 
-/* FUnctions:
+/* Functions:
 KeyPressed
 KeyReleased
 drawCloud
