@@ -303,7 +303,6 @@ function drawlife(lives) {
 
 function checkFlagpole() {
 	var d = abs(gameChar_world_x - flagpole.x_pos)
-	console.log(d)
 	if (d <= 55) {
 		flagpole.isReached = true;
 	} else {
@@ -391,7 +390,7 @@ function startGame() {
 
 	//Flagpole
 	flagpole = {
-		isReached: true,
+		isReached: false,
 		x_pos: 1500
 	}
 }
