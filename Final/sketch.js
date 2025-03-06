@@ -74,12 +74,10 @@ function draw() {
 	if (isFrozen == false) {
 		if (isLeft == true) {//when going left
 			cameraPosX += 5;
-			floorPos_x -= 5
-			//gameChar_x -=5;
+			//floorPos_x -= 5
 		} else if (isRight == true) {//when going right
 			cameraPosX -= 5;
-			floorPos_x += 5;
-			//gameChar_x +=5;
+			//floorPos_x += 5;
 		}
 
 		if (isJumping == true) {//when jumping
