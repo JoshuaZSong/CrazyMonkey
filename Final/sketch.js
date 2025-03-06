@@ -1,17 +1,18 @@
 /*
-Author: Joshua Song
+Author: Zihao Song
 The Game Project
-Task 5
+Final
 Multiple interactables
 */
 
+import { moveCharacter, jump, getPosition } from './character.js';
 //Background mountain Canyon Trees
 let floorPos_y, floorPos_x;
 let mountains, canyons, trees_x, clouds;
 //Collectable
 let collectables;
 //Character
-let gameChar_x, gameChar_y, gameChar_world_x, lives, jumpHeight;
+let gameChar_x, gameChar_y, gameChar_world_x, lives, jumpSpeed, jumpHeight;
 //Charactoer status
 let isLeft, isRight, isFalling, isPlummeting, isJumping, isFrozen;
 //Game status 
@@ -79,7 +80,7 @@ function draw() {
 		}
 
 		if (isJumping == true) {//when jumping
-			gameChar_y -= jumpHeight;
+			gameChar_y -= jumpSpeed;
 			isPlummeting = false;
 		}
 	}
@@ -294,6 +295,7 @@ function startGame() {
 	gameChar_y = floorPos_y;
 	//Character set to default
 	isLeft, isRight, isFalling, isPlummeting, isJumping = false;
+	jumpSpeed = 10;
 	jumpHeight = 100;
 	isFrozen = false;
 	//Game Camera
