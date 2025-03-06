@@ -74,10 +74,8 @@ function draw() {
 	if (isFrozen == false) {
 		if (isLeft == true) {//when going left
 			cameraPosX += 5;
-			//floorPos_x -= 5
 		} else if (isRight == true) {//when going right
 			cameraPosX -= 5;
-			//floorPos_x += 5;
 		}
 
 		if (isJumping == true) {//when jumping
@@ -101,8 +99,6 @@ function draw() {
 		isFalling = false;
 		if (!isJumping) {
 			isFrozen = true;
-			console.log("Frozen by Gravity" + isPlummeting + isFalling + isFrozen + (gameChar_x + 30) + "=" + (cameraPosX + 500) + ","
-				+ (gameChar_x + 45) + "=" + (cameraPosX + 600))
 		}
 	}
 
@@ -111,39 +107,26 @@ function draw() {
 
 
 function keyPressed() {
-	//Open up the console to see how these press work
-	console.log("keyPressed: " + key);
-
 	//If statements to control the animation of the character when keys are pressed.
 	if (isFrozen == false) {
 		if ((keyCode == 38 || keyCode == 32) && !isFalling) {
-			console.log("up arrow");
 			isJumping = true;
 		}
 
 		if (keyCode == 37) {
-			console.log("left arrow");
-			console.log(isJumping);
 			isLeft = true;
 		} else if (keyCode == 39) {
-			console.log("right arrow");
-			console.log(isJumping);
 			isRight = true;
 		}
 	}
 }
 
 function keyReleased() {
-	//Open up the console to see how the release work
-	console.log("keyReleased: " + key);
 	//If statements to control the animation of the character when keys are released.
 	if (keyCode == 37) {
 		isLeft = false;
-		console.log("isLeft is " + isLeft);
 	} else if (keyCode == 39) {
 		isRight = false;
-		console.log("isRight is " + isRight
-		);
 	} else if (keyCode == 38 || keyCode == 32) {
 		isJumping = false;
 	}
@@ -242,7 +225,6 @@ function drawFlagpole() {
 	if (flagpole.isReached) {
 		rect(flagpole.x_pos, floorPos_y - 50, 50, 50);
 		text("Level Completed!", width / 2 - cameraPosX, height / 2);
-		console.log("Level Completed!")
 	} else {
 
 		rect(flagpole.x_pos, floorPos_y - 250, 50, 50);
@@ -276,7 +258,6 @@ function checkCanyon(t_canyon) {
 	//falling into the canyon
 	if (gameChar_x + 35 >= t_canyon.x_pos + cameraPosX
 		&& gameChar_x + 40 <= t_canyon.x_pos + t_canyon.width + cameraPosX) {
-		console.log("canyon is " + isPlummeting)
 		if (!isFalling) {
 			gameChar_y += 4;
 		}
@@ -288,7 +269,6 @@ function checkFlagpole() {
 	if (d <= 55) {
 		flagpole.isReached = true;
 		isFrozen = true
-		console.log("Frozen by Wining")
 	} else {
 		flagpole.isReached = false;
 	}
@@ -298,12 +278,10 @@ function checkPlayerDie() {
 	if (gameChar_y > height) {
 		if (lives > 1) {
 			lives--;
-			console.log("Live is " + lives)
 			startGame();
 		} else {
 			lives--;
 			text("Game Over!", width / 2, height / 2);
-			console.log("Game over")
 		}
 	}
 }
