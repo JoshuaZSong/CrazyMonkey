@@ -5,39 +5,17 @@ Task 5
 Multiple interactables
 */
 
-//Background
-var floorPos_y;
-var floorPos_x;
-//nountain
-var mountains
-//Canyon
-var canyons;
-//Trees
-var trees_x;
-var trees_y;
-//Clouds
-var clouds;
+//Background mountain Canyon Trees
+let floorPos_y, floorPos_x;
+let mountains, canyons, trees_x, clouds;
 //Collectable
-var collectables;
+let collectables;
 //Character
-var gameChar_x;
-var gameChar_world_x;
-var gameChar_y;
-var lives;
-
-var isLeft;
-var isRight;
-var isFalling;
-var isPlummeting;
-var isJumping;
-var jumpHeight;
-var isFrozen;
-//Moving camera
-var cameraPosX;
-//Game Scores
-var gameScore;
-//Flagpole
-var flagpole;
+let gameChar_x, gameChar_y, gameChar_world_x, lives, jumpHeight;
+//Charactoer status
+let isLeft, isRight, isFalling, isPlummeting, isJumping, isFrozen;
+//Game status 
+let cameraPosX, gameScore, flagpole;
 
 function setup() {
 	createCanvas(1024, 576);
@@ -45,26 +23,9 @@ function setup() {
 	gameScore = 0;
 	lives = 3;
 
-	collectables = [
-		{
-			x_pos: 550,
-			y_pos: 350,
-			size: 50,
-			isFound: false//collectable's visablity
-		},
-		{
-			x_pos: 950,
-			y_pos: 350,
-			size: 50,
-			isFound: false
-		},
-		{
-			x_pos: 1150,
-			y_pos: 350,
-			size: 50,
-			isFound: false
-		}
-	]
+	collectables = [{ x_pos: 100, y_pos: 350, size: 50, isFound: false },
+	{ x_pos: 950, y_pos: 350, size: 50, isFound: false },
+	{ x_pos: 1150, y_pos: 350, size: 50, isFound: false }]
 
 	startGame();
 }
@@ -72,72 +33,34 @@ function setup() {
 function draw() {
 	//FIll the background with blue sky
 	background(100, 155, 255);
+	//Draw green ground
+	drawGround();
 
 	//Make the background "moving" following the camera
 	push();
 	translate(cameraPosX, 0);//set up the initial point
 
-	//Draw green ground
-	noStroke();
-	fill(0, 155, 0);
-	rect(floorPos_x, floorPos_y, width, height - floorPos_y);
-
 	//Draw clouds
 	drawCloud();
 
 	//Draw muntains
-	for (var i = 0; i < mountains_x.length; i++) {
-		fill(100, 100, 30, 100);
-		triangle(
-			mountains_x[i] - 200, mountains_y + 182,
-			mountains_x[i], mountains_y,
-			mountains_x[i] + 100, mountains_y + 182);
-		fill(100, 100, 30, 100);
-		triangle(
-			mountains_x[i], mountains_y + 182,
-			mountains_x[i] + 200, mountains_y,
-			mountains_x[i] + 330, mountains_y + 182);
-		fill(100, 100, 30);
-		triangle(
-			mountains_x[i] - 150, mountains_y + 182,
-			mountains_x[i] + 100, mountains_y - 70,
-			mountains_x[i] + 300, mountains_y + 182);
-	}
+	drawMountain();
 
 	//Draw trees
-	for (var i = 0; i < trees_x.length; i++) {
-		noStroke();
-		fill(100, 50, 40);
-		rect(trees_x[i], trees_y, 82, 144);
-		fill(80, 90, 30);
-		ellipse(trees_x[i] + 40, trees_y + 20, 180, 60);
-		ellipse(trees_x[i] + 40, trees_y - 20, 160, 50);
-		ellipse(trees_x[i] + 40, trees_y - 50, 120, 40);
-	}
+	drawTree();
 
 	//Draw a canyon
-	for (var i = 0; i < canyons.length; i++) {
-		drawCanyon(canyons[i]);
-		checkCanyon(canyons[i]);
-	}
+	drawCanyon();
 
 	//Draw flagpole;
 	drawFlagpole();
 
-
 	//Draw Collectable coin
-	for (var i = 0; i < collectables.length; i++) {
-		if (!collectables[i].isFound) {
-			drawCollectable(collectables[i]);
-			checkCollectable(collectables[i]);
-		}
-	}
-
+	drawCollectable()
 	pop();
 
 	//The game character
 	drawGameChar();
-
 
 	//Score Table at left-top corner.
 	drawScoreTable(gameScore);
@@ -158,7 +81,7 @@ function draw() {
 			floorPos_x += 5;
 			//gameChar_x +=5;
 		}
-		
+
 		if (isJumping == true) {//when jumping
 			gameChar_y -= jumpHeight;
 			isPlummeting = false;
@@ -188,17 +111,6 @@ function draw() {
 	gameChar_world_x = gameChar_x - cameraPosX;
 }//End of draw function
 
-/* Functions:
-KeyPressed
-KeyReleased
-drawCloud
-drawCollectable
-checkCollectable
-drawCanyon
-checkCanyon
-drawScoreTable
-drawGameChar
-*/
 
 function keyPressed() {
 	//Open up the console to see how these press work
@@ -220,15 +132,12 @@ function keyPressed() {
 			console.log(isJumping);
 			isRight = true;
 		}
-
-		
 	}
 }
 
 function keyReleased() {
 	//Open up the console to see how the release work
 	console.log("keyReleased: " + key);
-
 	//If statements to control the animation of the character when keys are released.
 	if (keyCode == 37) {
 		isLeft = false;
@@ -242,79 +151,84 @@ function keyReleased() {
 	}
 }
 
+//Background functions:
+
+function drawGround() {
+	noStroke();
+	fill(0, 155, 0);
+	rect(floorPos_x, floorPos_y, width, height - floorPos_y);
+}
 function drawCloud() {
-	for (var i = 0; i < cloud_x.length; i++) {
+	for (let i = 0; i < clouds.length; i++) {
 		noStroke();
 		fill(0, 0, 0);
-		ellipse(
-			cloud_x[i], cloud_y,
-			cloud_xSize, cloud_ySize);
-		ellipse(
-			cloud_x[i] - 90, cloud_y + 10,
-			cloud_xSize - 40, cloud_ySize - 20);
-		ellipse(
-			cloud_x[i] + 120, cloud_y + 10,
-			cloud_xSize - 40, cloud_ySize - 20);
+		let x = clouds[i].x_pos
+		let y = clouds[i].y_pos
+		let xs = clouds[i].x_size
+		let ys = clouds[i].y_size
+		ellipse(x, y, xs, ys);
+		ellipse(x - 90, y + 10, xs - 40, ys - 20);
+		ellipse(x + 120, y + 10, xs - 40, ys - 20);
 	}
 }
 
-function drawCollectable(t_collectable) {
-	if (t_collectable.isFound == false) {
+function drawMountain() {
+	for (let i = 0; i < mountains.length; i++) {
+		fill(100, 100, 30, 100);
+		let x = mountains[i].x_pos;
+		let y = mountains[i].y_pos;
+		triangle(
+			x - 200, y + 182,
+			x, y,
+			x + 100, y + 182);
+		fill(100, 100, 30, 100);
+		triangle(
+			x, y + 182,
+			x + 200, y,
+			x + 330, y + 182);
+		fill(100, 100, 30);
+		triangle(
+			x - 150, y + 182,
+			x + 100, y - 70,
+			x + 300, y + 182);
+	}
+}
+
+function drawCanyon() {
+	for (let i = 0; i < canyons.length; i++) {
+		fill(20);
+		rect(canyons[i].x_pos, canyons[i].y_pos, canyons[i].width, width - floorPos_y);
+		checkCanyon(canyons[i]);
+	}
+}
+
+function drawTree() {
+	for (let i = 0; i < trees_x.length; i++) {
 		noStroke();
-		fill(250, 250, 0);
-		ellipse(t_collectable.x_pos, t_collectable.y_pos, 20, 40);
-		fill(220, 220, 140);
-		ellipse(t_collectable.x_pos + 5, t_collectable.y_pos, 10, 20);
+		fill(100, 50, 40);
+		rect(trees_x[i], height / 2, 82, 144);
+		fill(80, 90, 30);
+		ellipse(trees_x[i] + 40, height / 2 + 20, 180, 60);
+		ellipse(trees_x[i] + 40, height / 2 - 20, 160, 50);
+		ellipse(trees_x[i] + 40, height / 2 - 50, 120, 40);
 	}
 }
 
-function checkCollectable(t_collectable) {
-	//If the distance of the collectable and the character is closer than 45 the collectable will disappear
-	if (dist(gameChar_x + 40, gameChar_y - 50, t_collectable.x_pos + cameraPosX, t_collectable.y_pos) < t_collectable.size) {
-		t_collectable.isFound = true;
-		gameScore += 1;
-	}
-}
-
-function drawCanyon(t_canyon) {
-	fill(20);
-	rect(t_canyon.x_pos, t_canyon.y_pos, t_canyon.width, width - floorPos_y);
-
-}
-
-function checkCanyon(t_canyon) {
-	//falling into the canyon
-	if (gameChar_x + 35 >= t_canyon.x_pos + cameraPosX
-		&& gameChar_x + 40 <= t_canyon.x_pos + t_canyon.width + cameraPosX) {
-		console.log("canyon is " + isPlummeting)
-		if (!isFalling) {
-			gameChar_y += 4;
+function drawCollectable() {
+	for (let i = 0; i < collectables.length; i++) {
+		if (!collectables[i].isFound) {
+			if (collectables[i].isFound == false) {
+				noStroke();
+				fill(250, 250, 0);
+				ellipse(collectables[i].x_pos, collectables[i].y_pos, 20, 40);
+				fill(220, 220, 140);
+				ellipse(collectables[i].x_pos + 5, collectables[i].y_pos, 10, 20);
+			}
+			checkCollectable(collectables[i]);
 		}
 	}
-}
 
-function drawScoreTable(score) {
-	fill(255);
-	noStroke();
-	text("Score:" + score, 20, 20)
-}
 
-function drawlife(lives) {
-	for (let i = 0; i < lives; i++) {
-		fill(255, 0, 0);
-		ellipse(30 + i * 30, 40, 20, 20);
-	}
-}
-
-function checkFlagpole() {
-	var d = abs(gameChar_world_x - flagpole.x_pos)
-	if (d <= 55) {
-		flagpole.isReached = true;
-		isFrozen = true
-		console.log("Frozen by Wining")
-	} else {
-		flagpole.isReached = false;
-	}
 }
 
 function drawFlagpole() {
@@ -335,7 +249,51 @@ function drawFlagpole() {
 
 		rect(flagpole.x_pos, floorPos_y - 250, 50, 50);
 	}
+}
 
+//Game status:
+function drawScoreTable(score) {
+	fill(255);
+	noStroke();
+	text("Score:" + score, 20, 20)
+}
+
+function drawlife(lives) {
+	for (let i = 0; i < lives; i++) {
+		fill(255, 0, 0);
+		ellipse(30 + i * 30, 40, 20, 20);
+	}
+}
+
+//Character reactions:
+function checkCollectable(t_collectable) {
+	//If the distance of the collectable and the character is closer than 45 the collectable will disappear
+	if (dist(gameChar_x + 40, gameChar_y - 50, t_collectable.x_pos + cameraPosX, t_collectable.y_pos) < t_collectable.size) {
+		t_collectable.isFound = true;
+		gameScore += 1;
+	}
+}
+
+function checkCanyon(t_canyon) {
+	//falling into the canyon
+	if (gameChar_x + 35 >= t_canyon.x_pos + cameraPosX
+		&& gameChar_x + 40 <= t_canyon.x_pos + t_canyon.width + cameraPosX) {
+		console.log("canyon is " + isPlummeting)
+		if (!isFalling) {
+			gameChar_y += 4;
+		}
+	}
+}
+
+function checkFlagpole() {
+	let d = abs(gameChar_world_x - flagpole.x_pos)
+	if (d <= 55) {
+		flagpole.isReached = true;
+		isFrozen = true
+		console.log("Frozen by Wining")
+	} else {
+		flagpole.isReached = false;
+	}
 }
 
 function checkPlayerDie() {
@@ -352,51 +310,37 @@ function checkPlayerDie() {
 	}
 }
 
+//Start/replay of the game
 function startGame() {
 	floorPos_x = 0
-	gameChar_x = width / 6;
+	//Character status
+	gameChar_x = width / 2;
 	gameChar_y = floorPos_y;
-	isLeft = false;
-	isRight = false;
-	isFalling = false;
-	isPlummeting = false;
-	isJumping = false;
+	//Character set to default
+	isLeft, isRight, isFalling, isPlummeting, isJumping = false;
 	jumpHeight = 100;
 	isFrozen = false;
+	//Game Camera
 	cameraPosX = 0;
 
-	canyons = [
-		{
-			x_pos: 500,
-			y_pos: floorPos_y,
-			width: 100
-		},
-		{
-			x_pos: 900,
-			y_pos: floorPos_y,
-			width: 100
-		},
-		{
-			x_pos: 1100,
-			y_pos: floorPos_y,
-			width: 100
-		}
-	]
-
+	//Back ground set up
+	//Canyons in array
+	canyons = [{ x_pos: 200, y_pos: floorPos_y, width: 100 },
+	{ x_pos: 900, y_pos: floorPos_y, width: 100 },
+	{ x_pos: 1100, y_pos: floorPos_y, width: 100 }]
 
 	//Trees in array
 	trees_x = [100, 300, 700, 100, 1400];
-	trees_y = height / 2;
 
 	//Clouds in array
-	clouds = [{x_pos:150,y_pos:100,x_size:180,y_size:60},
-		{x_pos:600,y_pos:100,x_size:180,y_size:60},
-		{x_pos:1450,y_pos:100,x_size:180,y_size:60}];
+	clouds = [{ x_pos: 150, y_pos: 100, x_size: 180, y_size: 60 },
+	{ x_pos: 600, y_pos: 100, x_size: 180, y_size: 60 },
+	{ x_pos: 1450, y_pos: 100, x_size: 180, y_size: 60 }];
 
 	//Mountain in array
-	mountains_x = [{x_pos:500,height:250},
-		{x_pos:500,height:250},
-		{x_pos:500,height:250}];
+	mountains = [{ x_pos: 500, y_pos: 250 },
+	{ x_pos: 500, y_pos: 250 },
+	{ x_pos: 500, y_pos: 250 }];
 
 	//Flagpole
 	flagpole = {
@@ -407,7 +351,6 @@ function startGame() {
 
 
 function drawGameChar() {
-	push();//to make the character not moving
 	if (isLeft && (isFalling || isPlummeting)) {//the character jumping and facing the left side
 		//Body
 		fill(139, 69, 19); //brown
@@ -770,5 +713,4 @@ function drawGameChar() {
 		ellipse(gameChar_x - 30, gameChar_y - 85, 4, 8);
 		ellipse(gameChar_x - 25, gameChar_y - 80, 15, 10);
 	}
-	pop();
 }
