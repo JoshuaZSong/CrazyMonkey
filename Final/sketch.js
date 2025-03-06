@@ -25,6 +25,7 @@ var collectables;
 var gameChar_x;
 var gameChar_world_x;
 var gameChar_y;
+var isFacingLeft;
 var lives;
 
 var isLeft;
@@ -178,10 +179,10 @@ function draw() {
 	} else {
 		isPlummeting = true;
 		isFalling = false;
-		if(!isJumping){
+		if (!isJumping) {
 			isFrozen = true;
-		console.log("Frozen by Gravity" + isPlummeting + isFalling + isFrozen + (gameChar_x + 30) + "=" + (cameraPosX + 500) + "," 
-		+ (gameChar_x + 45) + "=" + (cameraPosX + 600))
+			console.log("Frozen by Gravity" + isPlummeting + isFalling + isFrozen + (gameChar_x + 30) + "=" + (cameraPosX + 500) + ","
+				+ (gameChar_x + 45) + "=" + (cameraPosX + 600))
 		}
 	}
 
@@ -352,6 +353,7 @@ function startGame() {
 	floorPos_x = 0
 	gameChar_x = width / 6;
 	gameChar_y = floorPos_y;
+	isFacingLeft = false;
 	isLeft = false;
 	isRight = false;
 	isFalling = false;
@@ -404,367 +406,97 @@ function startGame() {
 
 function drawGameChar() {
 	push();//to make the character not moving
-	if (isLeft && (isFalling || isPlummeting)) {//the character jumping and facing the left side
-		//Body
-		fill(139, 69, 19); //brown
-		stroke(0);
-		strokeWeight(3);
-		ellipse(gameChar_x + 40, gameChar_y - 50, 80, 80);
-		//Arms and legs
-		strokeWeight(4);
-		line(gameChar_x + 50, gameChar_y - 40, gameChar_x + 60, gameChar_y);//left arm
-		line(gameChar_x + 80, gameChar_y - 40, gameChar_x + 90, gameChar_y);//right arm
-		line(gameChar_x + 24, gameChar_y - 40, gameChar_x + 32, gameChar_y);//right leg
-		line(gameChar_x + 60, gameChar_y - 19, gameChar_x + 65, gameChar_y);//left leg  
-		//Face
-		strokeWeight(3);
-		ellipse(gameChar_x + 30, gameChar_y - 70, 55, 48); //head
-		fill(225, 0, 0);
-		strokeWeight(2);
-		arc(gameChar_x + 6, gameChar_y - 63, 80, 50, radians(-2), radians(27))// mouth
-		arc(gameChar_x + 30, gameChar_y - 70, 55, 48, radians(75), radians(167))// mouth
-		noStroke();
-		fill(139, 69, 19);
-		triangle(gameChar_x + 30, gameChar_y - 71,
-			gameChar_x + 4, gameChar_y - 64,
-			gameChar_x + 33, gameChar_y - 64)
-		stroke(0);
-		strokeWeight(2);
-		line(gameChar_x + 4, gameChar_y - 64,
-			gameChar_x + 46, gameChar_y - 65);
-		//Teeth
-		strokeWeight(1);
-		fill(225, 0, 0);
-		beginShape();
-		vertex(gameChar_x + 11, gameChar_y - 63);
-		vertex(gameChar_x + 16, gameChar_y - 50);
-		vertex(gameChar_x + 21, gameChar_y - 64);
-		vertex(gameChar_x + 26, gameChar_y - 50);
-		vertex(gameChar_x + 31, gameChar_y - 64);
-		vertex(gameChar_x + 36, gameChar_y - 50);
-		vertex(gameChar_x + 41, gameChar_y - 64);
-		endShape();
-		//Eyes
-		stroke(240, 125, 0);
-		strokeWeight(5);
-		point(gameChar_x + 40, gameChar_y - 75);
-		point(gameChar_x + 20, gameChar_y - 75);
-		//Tail with a magic hand
-		noFill();
-		stroke(139, 69, 19);
-		strokeWeight(7);
-		line(gameChar_x + 80, gameChar_y - 60,
-			gameChar_x + 105, gameChar_y - 20);
-		fill(255);
-		stroke(0);
-		strokeWeight(1);
-		ellipse(gameChar_x + 105, gameChar_y - 13, 4, 8);
-		ellipse(gameChar_x + 110, gameChar_y - 15, 4, 8);
-		ellipse(gameChar_x + 100, gameChar_y - 15, 4, 8);
-		ellipse(gameChar_x + 105, gameChar_y - 20, 15, 10);
-	} else if (isRight && (isFalling || isPlummeting)) {//the character jumping facing the right side
-		//Body
-		fill(139, 69, 19); // brown
-		stroke(0);
-		strokeWeight(3);
-		ellipse(gameChar_x + 50, gameChar_y - 60, 80, 80);
-		//Arms and legs
-		strokeWeight(4);
-		line(gameChar_x + 40, gameChar_y - 40, gameChar_x + 30, gameChar_y);//left arm
-		line(gameChar_x + 70, gameChar_y - 40, gameChar_x + 60, gameChar_y);//right arm
-		line(gameChar_x + 14, gameChar_y - 40, gameChar_x + 2, gameChar_y);//right leg
-		line(gameChar_x + 50, gameChar_y - 19, gameChar_x + 45, gameChar_y);//left leg  
-		//Face
-		strokeWeight(3);
-		ellipse(gameChar_x + 65, gameChar_y - 70, 55, 48); //head
-		fill(225, 0, 0);
-		strokeWeight(2);
-		arc(gameChar_x + 41, gameChar_y - 63, 80, 50, radians(-2), radians(27))// mouth
-		arc(gameChar_x + 65, gameChar_y - 70, 55, 48, radians(75), radians(167))// mouth
-		noStroke();
-		fill(139, 69, 19);
-		triangle(gameChar_x + 65, gameChar_y - 71,
-			gameChar_x + 39, gameChar_y - 64,
-			gameChar_x + 68, gameChar_y - 64)
-		stroke(0);
-		strokeWeight(2);
-		line(gameChar_x + 39, gameChar_y - 64,
-			gameChar_x + 81, gameChar_y - 65);
-		//Teeth
-		strokeWeight(1);
-		fill(225, 0, 0);
-		beginShape();
-		vertex(gameChar_x + 46, gameChar_y - 63);
-		vertex(gameChar_x + 51, gameChar_y - 50);
-		vertex(gameChar_x + 56, gameChar_y - 64);
-		vertex(gameChar_x + 61, gameChar_y - 50);
-		vertex(gameChar_x + 66, gameChar_y - 64);
-		vertex(gameChar_x + 71, gameChar_y - 50);
-		vertex(gameChar_x + 76, gameChar_y - 64);
-		endShape();
-		//Eyes
-		stroke(240, 125, 0);
-		strokeWeight(5);
-		point(gameChar_x + 75, gameChar_y - 75);
-		point(gameChar_x + 55, gameChar_y - 75);
-		//Tail with a magic hand
-		noFill();
-		stroke(139, 69, 19);
-		strokeWeight(7);
-		line(gameChar_x + 10, gameChar_y - 60,
-			gameChar_x - 5, gameChar_y - 20);
-		fill(255);
-		stroke(0);
-		strokeWeight(1);
-		ellipse(gameChar_x - 5, gameChar_y - 13, 4, 8);
-		ellipse(gameChar_x, gameChar_y - 15, 4, 8);
-		ellipse(gameChar_x - 10, gameChar_y - 15, 4, 8);
-		ellipse(gameChar_x - 5, gameChar_y - 20, 15, 10);
-	} else if (isLeft) {//the character walking facing the left side
-		//Body
-		fill(139, 69, 19); // brown
-		stroke(0);
-		strokeWeight(3);
-		ellipse(gameChar_x + 40, gameChar_y - 50, 80, 80);
-		//Arms and legs
-		strokeWeight(4);
-		line(gameChar_x + 20, gameChar_y - 30, gameChar_x + 10, gameChar_y - 10);//right arm
-		line(gameChar_x + 10, gameChar_y - 10, gameChar_x + 15, gameChar_y + 10);//right arm
-		line(gameChar_x + 50, gameChar_y - 30, gameChar_x + 70, gameChar_y - 10);//left arm
-		line(gameChar_x + 70, gameChar_y - 10, gameChar_x + 60, gameChar_y + 10);//left arm 
-		line(gameChar_x + 75, gameChar_y - 30, gameChar_x + 94, gameChar_y - 15);//right leg
-		line(gameChar_x + 94, gameChar_y - 15, gameChar_x + 85, gameChar_y + 10);//right leg
-		line(gameChar_x + 30, gameChar_y - 10, gameChar_x + 35, gameChar_y + 10);//left leg 
-		// Face
-		strokeWeight(3);
-		ellipse(gameChar_x + 15, gameChar_y - 70, 55, 48); //head
-		fill(225, 0, 0);
-		strokeWeight(2);
-		arc(gameChar_x - 9, gameChar_y - 63, 80, 50, radians(-2), radians(27))// mouth
-		arc(gameChar_x + 15, gameChar_y - 70, 55, 48, radians(75), radians(167))// mouth
-		noStroke();
-		fill(139, 69, 19);
-		triangle(gameChar_x + 15, gameChar_y - 71,
-			gameChar_x - 11, gameChar_y - 64,
-			gameChar_x + 18, gameChar_y - 64)
-		stroke(0);
-		strokeWeight(2);
-		line(gameChar_x - 11, gameChar_y - 64,
-			gameChar_x + 31, gameChar_y - 65);
-		//Teeth
-		strokeWeight(1);
-		fill(225, 0, 0);
-		beginShape();
-		vertex(gameChar_x - 4, gameChar_y - 63);
-		vertex(gameChar_x + 1, gameChar_y - 50);
-		vertex(gameChar_x + 6, gameChar_y - 64);
-		vertex(gameChar_x + 11, gameChar_y - 50);
-		vertex(gameChar_x + 16, gameChar_y - 64);
-		vertex(gameChar_x + 21, gameChar_y - 50);
-		vertex(gameChar_x + 26, gameChar_y - 64);
-		endShape();
-		//Eyes
-		stroke(240, 125, 0);
-		strokeWeight(5);
-		point(gameChar_x + 25, gameChar_y - 75);
-		point(gameChar_x + 5, gameChar_y - 75);
-		//Tail with a magic hand
-		noFill();
-		stroke(139, 69, 19);
-		strokeWeight(7);
-		line(gameChar_x + 80, gameChar_y - 50,
-			gameChar_x + 95, gameChar_y - 45);
-		line(gameChar_x + 95, gameChar_y - 45,
-			gameChar_x + 105, gameChar_y - 80);
-		fill(255);
-		stroke(0);
-		strokeWeight(1);
-		ellipse(gameChar_x + 105, gameChar_y - 87, 4, 8);
-		ellipse(gameChar_x + 110, gameChar_y - 85, 4, 8);
-		ellipse(gameChar_x + 100, gameChar_y - 85, 4, 8);
-		ellipse(gameChar_x + 105, gameChar_y - 80, 15, 10);
-	} else if (isRight) {//the character waling facing the right side
-		//Body
-		fill(139, 69, 19); //brown
-		stroke(0);
-		strokeWeight(3);
-		ellipse(gameChar_x + 40, gameChar_y - 50, 80, 80);
-		//Arms and legs
-		strokeWeight(4);
-		line(gameChar_x + 30, gameChar_y - 30, gameChar_x + 10, gameChar_y - 10);//left arm
-		line(gameChar_x + 10, gameChar_y - 10, gameChar_x + 15, gameChar_y + 10);//left arm
-		line(gameChar_x + 60, gameChar_y - 30, gameChar_x + 70, gameChar_y - 10);//right arm
-		line(gameChar_x + 70, gameChar_y - 10, gameChar_x + 65, gameChar_y + 10);//right arm 
-		line(gameChar_x + 4, gameChar_y - 30, gameChar_x - 15, gameChar_y - 15);//left leg
-		line(gameChar_x - 15, gameChar_y - 15, gameChar_x - 10, gameChar_y + 10);//right leg  
-		line(gameChar_x + 50, gameChar_y - 10, gameChar_x + 45, gameChar_y + 10);//right leg 
-		// Face
-		strokeWeight(3);
-		ellipse(gameChar_x + 65, gameChar_y - 70, 55, 48); //head
-		fill(225, 0, 0);
-		strokeWeight(2);
-		arc(gameChar_x + 41, gameChar_y - 63, 80, 50, radians(-2), radians(27))// mouth
-		arc(gameChar_x + 65, gameChar_y - 70, 55, 48, radians(75), radians(167))// mouth
-		noStroke();
-		fill(139, 69, 19);
-		triangle(gameChar_x + 65, gameChar_y - 71,
-			gameChar_x + 39, gameChar_y - 64,
-			gameChar_x + 68, gameChar_y - 64)
-		stroke(0);
-		strokeWeight(2);
-		line(gameChar_x + 39, gameChar_y - 64,
-			gameChar_x + 81, gameChar_y - 65);
-		//Teeth
-		strokeWeight(1);
-		fill(225, 0, 0);
-		beginShape();
-		vertex(gameChar_x + 46, gameChar_y - 63);
-		vertex(gameChar_x + 51, gameChar_y - 50);
-		vertex(gameChar_x + 56, gameChar_y - 64);
-		vertex(gameChar_x + 61, gameChar_y - 50);
-		vertex(gameChar_x + 66, gameChar_y - 64);
-		vertex(gameChar_x + 71, gameChar_y - 50);
-		vertex(gameChar_x + 76, gameChar_y - 64);
-		endShape();
-		//Eyes
-		stroke(240, 125, 0);
-		strokeWeight(5);
-		point(gameChar_x + 75, gameChar_y - 75);
-		point(gameChar_x + 55, gameChar_y - 75);
-		//Tail with a magic hand
-		noFill();
-		stroke(139, 69, 19);
-		strokeWeight(7);
-		line(gameChar_x, gameChar_y - 50,
-			gameChar_x - 15, gameChar_y - 45);
-		line(gameChar_x - 15, gameChar_y - 45,
-			gameChar_x - 25, gameChar_y - 80);
-		fill(255);
-		stroke(0);
-		strokeWeight(1);
-		ellipse(gameChar_x - 25, gameChar_y - 87, 4, 8);
-		ellipse(gameChar_x - 20, gameChar_y - 85, 4, 8);
-		ellipse(gameChar_x - 30, gameChar_y - 85, 4, 8);
-		ellipse(gameChar_x - 25, gameChar_y - 80, 15, 10);
-	} else if (isFalling || isPlummeting) {//the character jumping facing front
-		//Body
-		fill(139, 69, 19); // brown
-		stroke(0);
-		strokeWeight(3);
-		ellipse(gameChar_x + 40, gameChar_y - 60, 80, 80);
-		//Arms and legs
-		strokeWeight(4);
-		line(gameChar_x + 20, gameChar_y - 30, gameChar_x + 20, gameChar_y - 10);//left arm
-		line(gameChar_x + 60, gameChar_y - 30, gameChar_x + 60, gameChar_y - 10);//right arm
-		line(gameChar_x + 50, gameChar_y - 20, gameChar_x + 50, gameChar_y + 5);//left leg 
-		line(gameChar_x + 30, gameChar_y - 20, gameChar_x + 30, gameChar_y + 5);//right leg 
-		strokeWeight(3);
-		ellipse(gameChar_x + 40, gameChar_y - 70, 55, 48); //head
-		fill(225, 0, 0);
-		strokeWeight(2);
-		arc(gameChar_x + 16, gameChar_y - 63, 80, 50, radians(-2), radians(27))// mouth
-		arc(gameChar_x + 40, gameChar_y - 70, 55, 48, radians(75), radians(167))// mouth
-		noStroke();
-		fill(139, 69, 19);
-		triangle(gameChar_x + 40, gameChar_y - 71,
-			gameChar_x + 14, gameChar_y - 64,
-			gameChar_x + 43, gameChar_y - 64)
-		stroke(0);
-		strokeWeight(2);
-		line(gameChar_x + 14, gameChar_y - 64,
-			gameChar_x + 56, gameChar_y - 65);
-		//Teeth
-		strokeWeight(1);
-		fill(225, 0, 0);
-		beginShape();
-		vertex(gameChar_x + 21, gameChar_y - 63);
-		vertex(gameChar_x + 26, gameChar_y - 50);
-		vertex(gameChar_x + 31, gameChar_y - 64);
-		vertex(gameChar_x + 36, gameChar_y - 50);
-		vertex(gameChar_x + 41, gameChar_y - 64);
-		vertex(gameChar_x + 46, gameChar_y - 50);
-		vertex(gameChar_x + 51, gameChar_y - 64);
-		endShape();
-		//Eyes
-		stroke(240, 125, 0);
-		strokeWeight(5);
-		point(gameChar_x + 50, gameChar_y - 75);
-		point(gameChar_x + 30, gameChar_y - 75);
-		//Tail with a magic hand
-		noFill();
-		stroke(139, 69, 19);
-		strokeWeight(7);
-		line(gameChar_x, gameChar_y - 60,
-			gameChar_x - 5, gameChar_y - 20);
-		fill(255);
-		stroke(0);
-		strokeWeight(1);
-		ellipse(gameChar_x - 5, gameChar_y - 13, 4, 8);
-		ellipse(gameChar_x, gameChar_y - 15, 4, 8);
-		ellipse(gameChar_x - 10, gameChar_y - 15, 4, 8);
-		ellipse(gameChar_x - 5, gameChar_y - 20, 15, 10);
-	} else {//the character stand facing front
-		// body
-		fill(139, 69, 19); // brown
-		stroke(0);
-		strokeWeight(3);
-		ellipse(gameChar_x + 40, gameChar_y - 50, 80, 80);
-		//Arms and legs
-		strokeWeight(4);
-		line(gameChar_x + 25, gameChar_y - 30, gameChar_x + 10, gameChar_y - 10);//left arm
-		line(gameChar_x + 10, gameChar_y - 10, gameChar_x + 15, gameChar_y + 10);//left arm
-		line(gameChar_x + 60, gameChar_y - 30, gameChar_x + 70, gameChar_y - 10);//right arm
-		line(gameChar_x + 70, gameChar_y - 10, gameChar_x + 65, gameChar_y + 10);//right arm 
-		line(gameChar_x + 50, gameChar_y - 10, gameChar_x + 50, gameChar_y + 10);//right leg 
-		line(gameChar_x + 30, gameChar_y - 10, gameChar_x + 30, gameChar_y + 10);//right leg 
-		// Face
-		strokeWeight(3);
-		ellipse(gameChar_x + 40, gameChar_y - 70, 55, 48); //head
-		fill(225, 0, 0);
-		strokeWeight(2);
-		arc(gameChar_x + 16, gameChar_y - 63, 80, 50, radians(-2), radians(27))// mouth
-		arc(gameChar_x + 40, gameChar_y - 70, 55, 48, radians(75), radians(167))// mouth
-		noStroke();
-		fill(139, 69, 19);
-		triangle(gameChar_x + 40, gameChar_y - 71,
-			gameChar_x + 14, gameChar_y - 64,
-			gameChar_x + 43, gameChar_y - 64)
-		stroke(0);
-		strokeWeight(2);
-		line(gameChar_x + 14, gameChar_y - 64,
-			gameChar_x + 56, gameChar_y - 65);
-		//Teeth
-		strokeWeight(1);
-		fill(225, 0, 0);
-		beginShape();
-		vertex(gameChar_x + 21, gameChar_y - 63);
-		vertex(gameChar_x + 26, gameChar_y - 50);
-		vertex(gameChar_x + 31, gameChar_y - 64);
-		vertex(gameChar_x + 36, gameChar_y - 50);
-		vertex(gameChar_x + 41, gameChar_y - 64);
-		vertex(gameChar_x + 46, gameChar_y - 50);
-		vertex(gameChar_x + 51, gameChar_y - 64);
-		endShape();
-		//Eyes
-		stroke(240, 125, 0);
-		strokeWeight(5);
-		point(gameChar_x + 50, gameChar_y - 75);
-		point(gameChar_x + 30, gameChar_y - 75);
-		//Tail with a magic hand
-		noFill();
-		stroke(139, 69, 19);
-		strokeWeight(7);
-		line(gameChar_x, gameChar_y - 50,
-			gameChar_x - 15, gameChar_y - 45);
-		line(gameChar_x - 15, gameChar_y - 45,
-			gameChar_x - 25, gameChar_y - 80);
-		fill(255);
-		stroke(0);
-		strokeWeight(1);
-		ellipse(gameChar_x - 25, gameChar_y - 87, 4, 8);
-		ellipse(gameChar_x - 20, gameChar_y - 85, 4, 8);
-		ellipse(gameChar_x - 30, gameChar_y - 85, 4, 8);
-		ellipse(gameChar_x - 25, gameChar_y - 80, 15, 10);
-	}
+	if (isLeft && (isFalling || isPlummeting)) {
+		drawWholeBody(gameChar_x + 40, gameChar_y - 50, true); // Left + Falling
+	  } else if (isRight && (isFalling || isPlummeting)) {
+		drawWholeBody(gameChar_x + 50, gameChar_y - 60, false); // Right + Falling
+	  } else if (isLeft) {
+		drawWholeBody(gameChar_x + 40, gameChar_y - 50, true); // Left + Walking
+	  } else if (isRight) {
+		drawWholeBody(gameChar_x + 40, gameChar_y - 50, false); // Right + Walking
+	  } else if (isFalling || isPlummeting) {
+		drawWholeBody(gameChar_x + 40, gameChar_y - 60, false); // Falling front
+	  } else {
+		drawWholeBody(gameChar_x + 40, gameChar_y - 50, false); // Standing front
+	  }
 	pop();
+}
+
+
+//Draw body of the character
+function drawBody(x, y) {
+	fill(139, 69, 19);
+	stroke(0);
+	strokeWeight(3);
+	ellipse(x, y, 80, 80);
+}
+
+//Draw arms and legs of the character
+function drawlimbs(x, y, isFacingLeft) {
+	strokeWeight(4);
+	// Arms
+	if (facingLeft) {
+		line(x + 50, y - 40, x + 60, y); // left arm
+		line(x + 80, y - 40, x + 90, y); // right arm
+	} else {
+		line(x + 30, y - 40, x + 10, y); // left arm
+		line(x + 70, y - 40, x + 60, y); // right arm
+	}
+	// Legs
+	line(x - 10, y + 30, x - legOffset, y + 50);  // Left leg
+	line(x + 10, y + 30, x + legOffset, y + 50);  // Right leg
+}
+
+// Draw the face (head + features)
+function drawFace(x, y) {
+	strokeWeight(3);
+	ellipse(x, y - 20, 55, 48); // head
+	fill(225, 0, 0);
+	strokeWeight(2);
+	arc(x - 14, y - 33, 80, 50, radians(-2), radians(27)); // mouth
+	arc(x, y - 20, 55, 48, radians(75), radians(167)); // mouth
+	noStroke();
+	fill(139, 69, 19);
+	triangle(x, y - 21, x - 16, y - 14, x + 3, y - 14); // mouth bottom
+	stroke(0);
+	strokeWeight(2);
+	line(x - 16, y - 14, x + 16, y - 15);  // teeth line
+}
+
+// Draw the teeth
+function drawTeeth(x, y) {
+	strokeWeight(1);
+	fill(225, 0, 0);
+	beginShape();
+	vertex(x - 9, y - 23);
+	vertex(x - 4, y - 10);
+	vertex(x + 1, y - 24);
+	vertex(x + 6, y - 10);
+	vertex(x + 11, y - 24);
+	vertex(x + 16, y - 10);
+	vertex(x + 21, y - 24);
+	endShape();
+}
+
+// Draw the eyes
+function drawEyes(x, y) {
+	stroke(240, 125, 0);
+	strokeWeight(5);
+	point(x + 10, y - 45);
+	point(x - 10, y - 45);
+}
+
+// Draw the tail with a magic hand
+function drawTailWithHand(x, y) {
+	noFill();
+	stroke(139, 69, 19);
+	strokeWeight(7);
+	line(x + 40, y - 20, x + 60, y); // Tail base line
+	fill(255);
+	stroke(0);
+	strokeWeight(1);
+	ellipse(x + 60, y + 10, 4, 8); // Magic hand start
+	ellipse(x + 65, y + 5, 4, 8);  // Magic hand spread
+	ellipse(x + 55, y + 5, 4, 8);  // Magic hand end
+	ellipse(x + 60, y, 15, 10);    // Magic hand circular part
 }
