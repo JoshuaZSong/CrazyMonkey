@@ -17,6 +17,14 @@ let gameChar_x, gameChar_y, gameChar_world_x, lives, jumpHeight;
 let isLeft, isRight, isFalling, isPlummeting, isJumping, isFrozen;
 //Game status 
 let cameraPosX, gameScore, flagpole;
+//Game sound
+let jumpSound;
+
+function preload() {
+	soundFormats('mp3', 'wav');
+	jumpSound = loadSound('assets/jump.wav');
+	jumpSound.setVolume(0.1);
+}
 
 function setup() {
 	createCanvas(1024, 576);
@@ -104,6 +112,10 @@ function draw() {
 	}
 
 	gameChar_world_x = gameChar_x - cameraPosX;
+
+	if (isJumping) {
+		jumpSound.play();
+	}
 }//End of draw function
 
 
