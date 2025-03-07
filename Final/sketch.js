@@ -12,7 +12,7 @@ let mountains, canyons, trees_x, clouds;
 //Collectable
 let collectables;
 //Character
-let gameChar_x, gameChar_y, gameChar_world_x, lives, jumpSpeed, jumpHeight;
+let gameChar_x, gameChar_y, gameChar_world_x, lives, jumpHeight;
 //Charactoer status
 let isLeft, isRight, isFalling, isPlummeting, isJumping, isFrozen;
 //Game status 
@@ -295,7 +295,6 @@ function startGame() {
 	gameChar_y = floorPos_y;
 	//Character set to default
 	isLeft, isRight, isFalling, isPlummeting, isJumping = false;
-	jumpSpeed = 10;
 	jumpHeight = 100;
 	isFrozen = false;
 	//Game Camera
