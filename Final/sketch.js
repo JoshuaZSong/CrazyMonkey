@@ -80,7 +80,7 @@ function draw() {
 		}
 
 		if (isJumping == true) {//when jumping
-			gameChar_y -= jumpSpeed;
+			gameChar_y -= jumpHeight;
 			isPlummeting = false;
 		}
 	}
