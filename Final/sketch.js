@@ -18,12 +18,27 @@ let isLeft, isRight, isFalling, isPlummeting, isJumping, isFrozen;
 //Game status 
 let cameraPosX, gameScore, flagpole;
 //Game sound
-let jumpSound;
+let jumpSound, completeSound, hascompleteSoundPlayed, collectSound1, collectSound2, collectSounds, failSound1, failSound2, failSounds, gameOverSound, hasGameOverSoundPlayed;
 
 function preload() {
 	soundFormats('mp3', 'wav');
-	jumpSound = loadSound('assets/jump.wav');
+	jumpSound = loadSound('assets/jumpSound.mp3');
 	jumpSound.setVolume(0.1);
+	completeSound = loadSound('assets/completeSound.mp3');
+	completeSound.setVolume(0.1);
+	completeSound.rate(1);
+	collectSound1 = loadSound('assets/collectSound1.mp3');
+	collectSound1.setVolume(0.1);
+	collectSound2 = loadSound('assets/collectSound2.wav');
+	collectSound2.setVolume(0.1);
+	collectSounds = [collectSound1, collectSound2];
+	failSound1 = loadSound('assets/failSound1.mp3');
+	failSound1.rate(2);
+	failSound2 = loadSound('assets/failSound2.mp3');
+	failSound2.rate(2);
+	failSounds = [failSound1, failSound2];
+	gameOverSound = loadSound('assets/gameOverSound.mp3');
+	gameOverSound.setVolume(0.1);
 }
 
 function setup() {
@@ -152,6 +167,7 @@ function drawGround() {
 	fill(0, 155, 0);
 	rect(floorPos_x, floorPos_y, width, height - floorPos_y);
 }
+
 function drawCloud() {
 	for (let i = 0; i < clouds.length; i++) {
 		noStroke();
@@ -264,6 +280,7 @@ function checkCollectable(t_collectable) {
 	if (dist(gameChar_x + 40, gameChar_y - 50, t_collectable.x_pos + cameraPosX, t_collectable.y_pos) < t_collectable.size) {
 		t_collectable.isFound = true;
 		gameScore += 1;
+		playRandomSound(collectSounds)
 	}
 }
 
@@ -282,6 +299,13 @@ function checkFlagpole() {
 	if (d <= 55) {
 		flagpole.isReached = true;
 		isFrozen = true
+		if (!hascompleteSoundPlayed) {
+			completeSound.play();
+			hascompleteSoundPlayed = true;
+		}
+		if (!completeSound.isPlaying() && hascompleteSoundPlayed) {
+			completeSound.stop();
+		}
 	} else {
 		flagpole.isReached = false;
 	}
@@ -292,11 +316,24 @@ function checkPlayerDie() {
 		if (lives > 1) {
 			lives--;
 			startGame();
+			playRandomSound(failSounds);
 		} else {
 			lives--;
 			text("Game Over!", width / 2, height / 2);
+			if (!hasGameOverSoundPlayed) {
+				gameOverSound.play();
+				hasGameOverSoundPlayed = true;
+			}
+			if (!gameOverSound.isPlaying() && hasGameOverSoundPlayed) {
+				gameOverSound.stop();
+			}
 		}
 	}
+}
+
+function playRandomSound(sounds) {
+	let randomIndex = floor(random(sounds.length))
+	sounds[randomIndex].play();
 }
 
 //Start/replay of the game
@@ -311,6 +348,8 @@ function startGame() {
 	isFrozen = false;
 	//Game Camera
 	cameraPosX = 0;
+	hascompleteSoundPlayed = false;
+	hasGameOverSoundPlayed = false;
 
 	//Back ground set up
 	//Canyons in array
