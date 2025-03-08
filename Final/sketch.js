@@ -6,9 +6,9 @@ Multiple interactables
 */
 
 //import { drawGameChar } from './character.js';
-//Background mountain Canyon Trees
+//Background mountain Canyon Trees plamtforms
 let floorPos_y, floorPos_x;
-let mountains, canyons, trees_x, clouds;
+let mountains, canyons, trees_x, clouds, plantforms;
 //Collectable
 let collectables;
 //Character
@@ -168,20 +168,6 @@ function drawGround() {
 	rect(floorPos_x, floorPos_y, width, height - floorPos_y);
 }
 
-function drawCloud() {
-	for (let i = 0; i < clouds.length; i++) {
-		noStroke();
-		fill(0, 0, 0);
-		let x = clouds[i].x_pos
-		let y = clouds[i].y_pos
-		let xs = clouds[i].x_size
-		let ys = clouds[i].y_size
-		ellipse(x, y, xs, ys);
-		ellipse(x - 90, y + 10, xs - 40, ys - 20);
-		ellipse(x + 120, y + 10, xs - 40, ys - 20);
-	}
-}
-
 function drawMountain() {
 	for (let i = 0; i < mountains.length; i++) {
 		fill(100, 100, 30, 100);
@@ -222,6 +208,33 @@ function drawTree() {
 		ellipse(trees_x[i] + 40, height / 2 - 20, 160, 50);
 		ellipse(trees_x[i] + 40, height / 2 - 50, 120, 40);
 	}
+}
+
+function drawCloud() {
+	for (let i = 0; i < clouds.length; i++) {
+		noStroke();
+		fill(0, 0, 0);
+		let x = clouds[i].x_pos
+		let y = clouds[i].y_pos
+		let xs = clouds[i].x_size
+		let ys = clouds[i].y_size
+		ellipse(x, y, xs, ys);
+		ellipse(x - 90, y + 10, xs - 40, ys - 20);
+		ellipse(x + 120, y + 10, xs - 40, ys - 20);
+	}
+}
+
+function creatPlantforms(x, y, length) {
+	let p = {
+		x: x,
+		y: y,
+		length: length,
+		draw: function () {
+			fill(255, 0, 255);
+			rect(this.x, this.y, this.length, 10)
+		}
+	}
+	return p;
 }
 
 function drawCollectable() {
@@ -352,6 +365,11 @@ function startGame() {
 	hasGameOverSoundPlayed = false;
 
 	//Back ground set up
+	//Mountains in array
+	mountains = [{ x_pos: 500, y_pos: 250 },
+	{ x_pos: 500, y_pos: 250 },
+	{ x_pos: 500, y_pos: 250 }];
+
 	//Canyons in array
 	canyons = [{ x_pos: 200, y_pos: floorPos_y, width: 100 },
 	{ x_pos: 900, y_pos: floorPos_y, width: 100 },
@@ -365,10 +383,13 @@ function startGame() {
 	{ x_pos: 600, y_pos: 100, x_size: 180, y_size: 60 },
 	{ x_pos: 1450, y_pos: 100, x_size: 180, y_size: 60 }];
 
-	//Mountain in array
-	mountains = [{ x_pos: 500, y_pos: 250 },
-	{ x_pos: 500, y_pos: 250 },
-	{ x_pos: 500, y_pos: 250 }];
+	//Plantforms in array
+	plantforms = [];
+
+	canyons.forEach((canyon) => {
+		plantforms.push(creatPlantforms(canyon.x_pos,canyon.y_pos,canyon.width))
+	})
+	
 
 	//Flagpole
 	flagpole = {
