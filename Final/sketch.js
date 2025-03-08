@@ -18,7 +18,7 @@ let isLeft, isRight, isFalling, isPlummeting, isJumping, isFrozen;
 //enemy
 let enemies;
 //Player Status
-let waitForInput;
+let waitingForInput;
 //Game status 
 let currentlevel, cameraPosX, gameScore, flagpole;
 //Game sound
@@ -32,8 +32,8 @@ function preload() {
 function setup() {
 	createCanvas(1024, 576);
 	floorPos_y = height * 3 / 4;
-	gameScore = 3;
-	coinsQuantity = 0;
+	gameScore = 0;
+	coinsQuantity = 3;
 	lives = 3;
 	currentlevel = 0;
 
@@ -68,8 +68,8 @@ function draw() {
 	//The game character
 	drawGameChar();
 
-	//Score Table at left-top corner.
 	drawLevel(currentlevel);
+	//Score Table at left-top corner.
 	drawScoreTable(gameScore);
 	drawlife(lives)
 	checkFlagpole();
@@ -148,18 +148,13 @@ function keyPressed() {
 			isRight = true;
 		}
 	}
-	if (waitForInput) {
+
+	if (waitingForInput) {
 		if (keyCode == 89 || keyCode == 13) {
-			fill(255);
-			stroke(0);
-			text("You bought a life! Press any key to continue.", width / 2, height / 2 + 30);
+			coinsQuantity -= 3;
 			lives++;
-			coinsQuantity -=3;
 			waitingForInput = false;
 		} else if (keyCode == 78 || keyCode == 27) {
-			fill(255);
-			stroke(0);
-			text("You chose not to buy a life. Press any key to continue.", width / 2, height / 2 + 30);
 			waitingForInput = false;
 		} else {
 			fill(255);
@@ -405,8 +400,6 @@ function checkFlagpole() {
 		if (d <= 50) {
 			flagpole.isReached = true;
 			isFrozen = true
-			currentlevel++;
-			completeLevel();
 			if (!hascompleteSoundPlayed) {
 				completeSound.play();
 				hascompleteSoundPlayed = true;
@@ -414,6 +407,7 @@ function checkFlagpole() {
 			if (!completeSound.isPlaying() && hascompleteSoundPlayed) {
 				completeSound.stop();
 			}
+			completeLevel();
 		} else {
 			flagpole.isReached = false;
 		}
@@ -473,23 +467,25 @@ function playRandomSound(sounds) {
 }
 
 function completeLevel() {
-	if (gameScore >= 3) {
+	if (coinsQuantity >= 3) {
 		fill(255);
 		stroke(0)
-		text("Would you like to buy a life for " + 3 + "coins? Y/N", width / 2, height / 2);
-		waitForInput = true;
+		text("Would you like to buy a life for " + 3 + " coins? Y/N", width / 2 - 60, height / 2 + 20);
+		waitingForInput = true;
 	}
 	else {
-		startLevel();
+		startLevel(currentlevel);
 	}
 }
 //Start of each game level
 function startLevel(currentlevel) {
+	currentlevel++;
 	startGame(currentlevel);
 }
 
 //Start/replay of the game
 function startGame(currentlevel) {
+	console.log(currentlevel)
 	floorPos_x = 0
 	//Character status
 	gameChar_x = width / 2;
@@ -500,10 +496,10 @@ function startGame(currentlevel) {
 	isTransparent = false;//This is a variable for game testing, when it is true, the character is immortal
 	//Character set to default
 	isLeft, isRight, isFalling, isPlummeting, isJumping = false;
-	jumpHeight = 100;
+	jumpHeight = 500;
 	isFrozen = false;
 	//Player status
-	waitForInput = false;
+	waitingForInput = false;
 	//Game Camera
 	cameraPosX = 0;
 	hascompleteSoundPlayed = false;
