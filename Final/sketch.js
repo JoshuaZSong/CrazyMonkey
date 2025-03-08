@@ -12,13 +12,16 @@ let mountains, canyons, trees_x, clouds, plantforms;
 //Collectable
 let collectables;
 //Character
-let gameChar_x, gameChar_y, gameChar_world_x, lives, jumpHeight;
+let gameChar_x, gameChar_y, gameChar_width, gameChar_world_x, fallingSpeed, lives, jumpHeight;
 //Charactoer status
 let isLeft, isRight, isFalling, isPlummeting, isJumping, isFrozen;
+//enemy
+let enemies;
 //Game status 
 let cameraPosX, gameScore, flagpole;
 //Game sound
-let jumpSound, completeSound, hascompleteSoundPlayed, collectSound1, collectSound2, collectSounds, failSound1, failSound2, failSounds, gameOverSound, hasGameOverSoundPlayed;
+let jumpSound, completeSound, hascompleteSoundPlayed, collectSound1, collectSound2, collectSounds;
+let failSound1, failSound2, failSounds, gameOverSound, hasgoSoundPlayed;
 
 function preload() {
 	soundFormats('mp3', 'wav');
@@ -64,22 +67,13 @@ function draw() {
 	push();
 	translate(cameraPosX, 0);//set up the initial point
 
-	//Draw clouds
+	//Draw clouds, muntains, trees, canyons, plantforms, flagpole,Collectable coins
 	drawCloud();
-
-	//Draw muntains
 	drawMountain();
-
-	//Draw trees
 	drawTree();
-
-	//Draw a canyon
 	drawCanyon();
-
-	//Draw flagpole;
+	drawPlatform();
 	drawFlagpole();
-
-	//Draw Collectable coin
 	drawCollectable()
 	pop();
 
@@ -89,9 +83,7 @@ function draw() {
 	//Score Table at left-top corner.
 	drawScoreTable(gameScore);
 	drawlife(lives)
-
 	checkPlayerDie();
-
 	checkFlagpole();
 
 	//The opposite position change(opposite to the background)
@@ -101,7 +93,6 @@ function draw() {
 		} else if (isRight == true) {//when going right
 			cameraPosX -= 5;
 		}
-
 		if (isJumping == true) {//when jumping
 			gameChar_y -= jumpHeight;
 			isPlummeting = false;
@@ -110,8 +101,17 @@ function draw() {
 
 	//Gravity
 	if (gameChar_y < floorPos_y) {
-		isFalling = true
-		gameChar_y += 4;//character's fallign speed
+		let isContact = false;
+		for (let i = 0; i < plantforms.length; i++) {
+			if (plantforms[i].checkContact(gameChar_world_x, gameChar_y, gameChar_width + 10)) {
+				isContact = true;
+				break;
+			}
+		}
+		if (!isContact) {
+			isFalling = true
+			gameChar_y += fallingSpeed;//character's fallign speed
+		}
 		if (gameChar_y < (floorPos_y - jumpHeight)) {//Avoid double jumping
 			isJumping = false;
 		}
@@ -198,6 +198,34 @@ function drawCanyon() {
 	}
 }
 
+function creatPlantforms(x, y, length) {
+	let p = {
+		x: x,
+		y: y,
+		length: length,
+		draw: function () {
+			fill(0, 155, 0);
+			rect(this.x, this.y, this.length, 20)
+		},
+		checkContact: function (gc_x, gc_y, gc_w) {
+			if (gc_x + gc_w > this.x && gc_x + gc_w < this.x + this.length) {
+				let d = this.y - gc_y
+				if (d >= 0 && d < 10) {
+					return true;
+				}
+			}
+			return false;
+		}
+	}
+	return p;
+}
+
+function drawPlatform() {
+	for (let i = 0; i < plantforms.length; i++) {
+		plantforms[i].draw();
+	}
+};
+
 function drawTree() {
 	for (let i = 0; i < trees_x.length; i++) {
 		noStroke();
@@ -222,19 +250,6 @@ function drawCloud() {
 		ellipse(x - 90, y + 10, xs - 40, ys - 20);
 		ellipse(x + 120, y + 10, xs - 40, ys - 20);
 	}
-}
-
-function creatPlantforms(x, y, length) {
-	let p = {
-		x: x,
-		y: y,
-		length: length,
-		draw: function () {
-			fill(255, 0, 255);
-			rect(this.x, this.y, this.length, 10)
-		}
-	}
-	return p;
 }
 
 function drawCollectable() {
@@ -271,6 +286,37 @@ function drawFlagpole() {
 
 		rect(flagpole.x_pos, floorPos_y - 250, 50, 50);
 	}
+}
+
+//Enemies
+function Enemy(x, y, range) {
+	this.x = x;
+	this.y = y;
+	this.range = range;
+
+	this.currentX = x;
+	this.inc = 1
+
+	this.update = function () {
+		currentX += this.inc
+		if (this.currentX >= this.x + this.range) {
+			this.inc = -1;
+		} else if (this.currentX < this.x) {
+			this.inc = 1;
+		}
+	}
+
+	this.draw = function () {
+		this.update();
+		fill(0);
+		ellipse(this.x, this.y, random(), random())
+
+	}
+
+	this.checkContact = function () {
+
+	}
+
 }
 
 //Game status:
@@ -333,11 +379,11 @@ function checkPlayerDie() {
 		} else {
 			lives--;
 			text("Game Over!", width / 2, height / 2);
-			if (!hasGameOverSoundPlayed) {
+			if (!hasgoSoundPlayed) {
 				gameOverSound.play();
-				hasGameOverSoundPlayed = true;
+				hasgoSoundPlayed = true;
 			}
-			if (!gameOverSound.isPlaying() && hasGameOverSoundPlayed) {
+			if (!gameOverSound.isPlaying() && hasgoSoundPlayed) {
 				gameOverSound.stop();
 			}
 		}
@@ -355,6 +401,8 @@ function startGame() {
 	//Character status
 	gameChar_x = width / 2;
 	gameChar_y = floorPos_y;
+	gameChar_width = 40;
+	fallingSpeed = 4;
 	//Character set to default
 	isLeft, isRight, isFalling, isPlummeting, isJumping = false;
 	jumpHeight = 100;
@@ -371,9 +419,9 @@ function startGame() {
 	{ x_pos: 500, y_pos: 250 }];
 
 	//Canyons in array
-	canyons = [{ x_pos: 200, y_pos: floorPos_y, width: 100 },
-	{ x_pos: 900, y_pos: floorPos_y, width: 100 },
-	{ x_pos: 1100, y_pos: floorPos_y, width: 100 }]
+	canyons = [{ x_pos: 200, y_pos: floorPos_y, width: 150 },
+	{ x_pos: 900, y_pos: floorPos_y, width: 150 },
+	{ x_pos: 1500, y_pos: floorPos_y, width: 150 }]
 
 	//Trees in array
 	trees_x = [100, 300, 700, 100, 1400];
@@ -385,16 +433,21 @@ function startGame() {
 
 	//Plantforms in array
 	plantforms = [];
-
 	canyons.forEach((canyon) => {
-		plantforms.push(creatPlantforms(canyon.x_pos,canyon.y_pos,canyon.width))
+		plantforms.push(creatPlantforms(canyon.x_pos + 35, canyon.y_pos - 125, canyon.width - 70))
 	})
-	
+
+	//Enemies
+	enemies = [];
+	canyons.forEach((canyon) => {
+		enemies.push(new Enemy(canyon.x_pos, floorPos_y - 10, canyon.x_pos + 1050))
+	})
+
 
 	//Flagpole
 	flagpole = {
 		isReached: false,
-		x_pos: 1500
+		x_pos: 2000
 	}
 }
 
@@ -405,7 +458,7 @@ function drawGameChar() {
 		fill(139, 69, 19); //brown
 		stroke(0);
 		strokeWeight(3);
-		ellipse(gameChar_x + 40, gameChar_y - 50, 80, 80);
+		ellipse(gameChar_x + gameChar_width, gameChar_y - 50, gameChar_width * 2, gameChar_width * 2);
 		//Arms and legs
 		strokeWeight(4);
 		line(gameChar_x + 50, gameChar_y - 40, gameChar_x + 60, gameChar_y);//left arm
@@ -463,7 +516,7 @@ function drawGameChar() {
 		fill(139, 69, 19); // brown
 		stroke(0);
 		strokeWeight(3);
-		ellipse(gameChar_x + 50, gameChar_y - 60, 80, 80);
+		ellipse(gameChar_x + gameChar_width + 10, gameChar_y - gameChar_width - 20, gameChar_width * 2, gameChar_width * 2);
 		//Arms and legs
 		strokeWeight(4);
 		line(gameChar_x + 40, gameChar_y - 40, gameChar_x + 30, gameChar_y);//left arm
@@ -521,7 +574,7 @@ function drawGameChar() {
 		fill(139, 69, 19); // brown
 		stroke(0);
 		strokeWeight(3);
-		ellipse(gameChar_x + 40, gameChar_y - 50, 80, 80);
+		ellipse(gameChar_x + gameChar_width, gameChar_y - 50, gameChar_width * 2, gameChar_width * 2);
 		//Arms and legs
 		strokeWeight(4);
 		line(gameChar_x + 20, gameChar_y - 30, gameChar_x + 10, gameChar_y - 10);//right arm
@@ -584,7 +637,7 @@ function drawGameChar() {
 		fill(139, 69, 19); //brown
 		stroke(0);
 		strokeWeight(3);
-		ellipse(gameChar_x + 40, gameChar_y - 50, 80, 80);
+		ellipse(gameChar_x + gameChar_width, gameChar_y - 50, gameChar_width * 2, gameChar_width * 2);
 		//Arms and legs
 		strokeWeight(4);
 		line(gameChar_x + 30, gameChar_y - 30, gameChar_x + 10, gameChar_y - 10);//left arm
@@ -647,7 +700,7 @@ function drawGameChar() {
 		fill(139, 69, 19); // brown
 		stroke(0);
 		strokeWeight(3);
-		ellipse(gameChar_x + 40, gameChar_y - 60, 80, 80);
+		ellipse(gameChar_x + gameChar_width, gameChar_y - 60, gameChar_width * 2, gameChar_width * 2);
 		//Arms and legs
 		strokeWeight(4);
 		line(gameChar_x + 20, gameChar_y - 30, gameChar_x + 20, gameChar_y - 10);//left arm
@@ -704,7 +757,7 @@ function drawGameChar() {
 		fill(139, 69, 19); // brown
 		stroke(0);
 		strokeWeight(3);
-		ellipse(gameChar_x + 40, gameChar_y - 50, 80, 80);
+		ellipse(gameChar_x + gameChar_width, gameChar_y - 50, gameChar_width * 2, gameChar_width * 2);
 		//Arms and legs
 		strokeWeight(4);
 		line(gameChar_x + 25, gameChar_y - 30, gameChar_x + 10, gameChar_y - 10);//left arm
