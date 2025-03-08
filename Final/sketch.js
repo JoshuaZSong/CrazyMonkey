@@ -12,36 +12,19 @@ let mountains, canyons, trees_x, clouds, plantforms;
 //Collectable
 let collectables;
 //Character
-let gameChar_x, gameChar_y, gameChar_width, gameChar_world_x, fallingSpeed, lives, jumpHeight;
+let gameChar_x, gameChar_y, gameChar_width, gameChar_world_x, fallingSpeed, lives, jumpHeight, isDead;
 //Charactoer status
 let isLeft, isRight, isFalling, isPlummeting, isJumping, isFrozen;
 //enemy
 let enemies;
 //Game status 
-let cameraPosX, gameScore, flagpole;
+let currentlevel,cameraPosX, gameScore, flagpole;
 //Game sound
 let jumpSound, completeSound, hascompleteSoundPlayed, collectSound1, collectSound2, collectSounds;
 let failSound1, failSound2, failSounds, gameOverSound, hasgoSoundPlayed;
 
 function preload() {
-	soundFormats('mp3', 'wav');
-	jumpSound = loadSound('assets/jumpSound.mp3');
-	jumpSound.setVolume(0.1);
-	completeSound = loadSound('assets/completeSound.mp3');
-	completeSound.setVolume(0.1);
-	completeSound.rate(1);
-	collectSound1 = loadSound('assets/collectSound1.mp3');
-	collectSound1.setVolume(0.1);
-	collectSound2 = loadSound('assets/collectSound2.wav');
-	collectSound2.setVolume(0.1);
-	collectSounds = [collectSound1, collectSound2];
-	failSound1 = loadSound('assets/failSound1.mp3');
-	failSound1.rate(2);
-	failSound2 = loadSound('assets/failSound2.mp3');
-	failSound2.rate(2);
-	failSounds = [failSound1, failSound2];
-	gameOverSound = loadSound('assets/gameOverSound.mp3');
-	gameOverSound.setVolume(0.1);
+	setUpSoundFiles();
 }
 
 function setup() {
@@ -49,12 +32,13 @@ function setup() {
 	floorPos_y = height * 3 / 4;
 	gameScore = 0;
 	lives = 3;
+	currentlevel = 0;
 
 	collectables = [{ x_pos: 100, y_pos: 350, size: 50, isFound: false },
 	{ x_pos: 950, y_pos: 350, size: 50, isFound: false },
 	{ x_pos: 1150, y_pos: 350, size: 50, isFound: false }]
 
-	startGame();
+	startLevel(currentlevel);
 }
 
 function draw() {
@@ -84,8 +68,9 @@ function draw() {
 	//Score Table at left-top corner.
 	drawScoreTable(gameScore);
 	drawlife(lives)
-	checkPlayerDie();
 	checkFlagpole();
+
+
 
 	//The opposite position change(opposite to the background)
 	if (isFrozen == false) {
@@ -119,11 +104,14 @@ function draw() {
 	} else if (gameChar_y == floorPos_y) {
 		isPlummeting = false;
 		isFalling = false;
-	} else {
+	} else if (gameChar_y > floorPos_y) {
 		isPlummeting = true;
 		isFalling = false;
 		if (!isJumping) {
 			isFrozen = true;
+		}
+		if (gameChar_y > height) {
+			checkPlayerDie();
 		}
 	}
 
@@ -131,6 +119,12 @@ function draw() {
 
 	if (isJumping) {
 		jumpSound.play();
+	}
+
+	if (isDead) {
+		fill(255);
+		stroke(0)
+		text("Game Over!", width / 2, height / 2);
 	}
 }//End of draw function
 
@@ -299,24 +293,29 @@ function Enemy(x, y, range) {
 	this.inc = 1
 
 	this.update = function () {
-		this.currentX += this.inc
-		if (this.currentX >= this.x + this.range) {
-			this.inc = -1;
-		} else if (this.currentX < this.x) {
-			this.inc = 1;
+		if (!isDead) {
+			this.currentX += this.inc
+			if (this.currentX >= this.x + this.range) {
+				this.inc = -1;
+			} else if (this.currentX < this.x) {
+				this.inc = 1;
+			}
 		}
+
 	}
 
 	this.draw = function () {
 		this.update();
-		fill(0);
-		ellipse(this.currentX, this.y, random(35, 40), random(35, 40))
-
+		for (let i = 0; i < 40; i++) {
+			noFill();
+			stroke(random(0, 255));
+			ellipse(this.currentX, this.y, i, i)
+		}
 	}
 
 	this.checkContact = function (gc_x, gc_y) {
 		let d = dist(gc_x, gc_y, this.currentX, this.y);
-		if (d < 40) {
+		if (d < 80) {
 			return true;
 		}
 		return false;
@@ -326,27 +325,11 @@ function Enemy(x, y, range) {
 function drawEnemies() {
 	for (let i = 0; i < enemies.length; i++) {
 		enemies[i].draw();
+		let isContact = enemies[i].checkContact(gameChar_world_x + gameChar_width, gameChar_y + gameChar_width)
 
-		let isContact = enemies[i].checkContact(gameChar_world_x, gameChar_y)
 		if (isContact) {
-			if (lives > 1) {
-				lives--;
-				startGame();
-				playRandomSound(failSounds);
-			} else {
-				lives--;
-				text("Game Over!", width / 2, height / 2);
-				isFrozen = true;
-				if (!hasgoSoundPlayed) {
-					gameOverSound.play();
-					hasgoSoundPlayed = true;
-				}
-				if (!gameOverSound.isPlaying() && hasgoSoundPlayed) {
-					gameOverSound.stop();
-				}
-			}
+			checkPlayerDie();
 		}
-
 	}
 }
 
@@ -402,23 +385,46 @@ function checkFlagpole() {
 }
 
 function checkPlayerDie() {
-	if (gameChar_y > height) {
-		if (lives > 1) {
-			lives--;
-			startGame();
-			playRandomSound(failSounds);
-		} else {
-			lives--;
-			text("Game Over!", width / 2, height / 2);
-			if (!hasgoSoundPlayed) {
-				gameOverSound.play();
-				hasgoSoundPlayed = true;
-			}
-			if (!gameOverSound.isPlaying() && hasgoSoundPlayed) {
-				gameOverSound.stop();
-			}
+	console.log('checkPlayerDie')
+	if (lives > 1) {
+		lives--;
+		startGame();
+		playRandomSound(failSounds);
+		console.log('failSounds')
+	} else {
+		lives--;
+		isDead = true;
+		isFrozen = true;
+		console.log('Over')
+		if (!hasgoSoundPlayed) {
+			gameOverSound.play();
+			hasgoSoundPlayed = true;
+		}
+		if (!gameOverSound.isPlaying() && hasgoSoundPlayed) {
+			gameOverSound.stop();
 		}
 	}
+}
+
+function setUpSoundFiles() {
+	soundFormats('mp3', 'wav');
+	jumpSound = loadSound('assets/jumpSound.mp3');
+	jumpSound.setVolume(0.1);
+	completeSound = loadSound('assets/completeSound.mp3');
+	completeSound.setVolume(0.1);
+	completeSound.rate(1);
+	collectSound1 = loadSound('assets/collectSound1.mp3');
+	collectSound1.setVolume(0.1);
+	collectSound2 = loadSound('assets/collectSound2.wav');
+	collectSound2.setVolume(0.1);
+	collectSounds = [collectSound1, collectSound2];
+	failSound1 = loadSound('assets/failSound1.mp3');
+	failSound1.rate(2);
+	failSound2 = loadSound('assets/failSound2.mp3');
+	failSound2.rate(2);
+	failSounds = [failSound1, failSound2];
+	gameOverSound = loadSound('assets/gameOverSound.mp3');
+	gameOverSound.setVolume(0.1);
 }
 
 function playRandomSound(sounds) {
@@ -426,8 +432,13 @@ function playRandomSound(sounds) {
 	sounds[randomIndex].play();
 }
 
+//Start of each game level
+function startLevel(currentlevel){
+	startGame(currentlevel);
+}
+
 //Start/replay of the game
-function startGame() {
+function startGame(currentlevel) {
 	floorPos_x = 0
 	//Character status
 	gameChar_x = width / 2;
