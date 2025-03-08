@@ -12,11 +12,13 @@ let mountains, canyons, trees_x, clouds, plantforms;
 //Collectable
 let collectables;
 //Character
-let gameChar_x, gameChar_y, gameChar_width, gameChar_world_x, fallingSpeed, lives, jumpHeight, isDead, isTransparent;
+let gameChar_x, gameChar_y, gameChar_width, gameChar_world_x, fallingSpeed, lives, jumpHeight, isDead, isTransparent, coinsQuantity;
 //Charactoer status
 let isLeft, isRight, isFalling, isPlummeting, isJumping, isFrozen;
 //enemy
 let enemies;
+//Player Status
+let waitForInput;
 //Game status 
 let currentlevel, cameraPosX, gameScore, flagpole;
 //Game sound
@@ -30,7 +32,8 @@ function preload() {
 function setup() {
 	createCanvas(1024, 576);
 	floorPos_y = height * 3 / 4;
-	gameScore = 0;
+	gameScore = 3;
+	coinsQuantity = 0;
 	lives = 3;
 	currentlevel = 0;
 
@@ -66,6 +69,7 @@ function draw() {
 	drawGameChar();
 
 	//Score Table at left-top corner.
+	drawLevel(currentlevel);
 	drawScoreTable(gameScore);
 	drawlife(lives)
 	checkFlagpole();
@@ -125,6 +129,7 @@ function draw() {
 		fill(255);
 		stroke(0)
 		text("Game Over!", width / 2, height / 2);
+		text("Your score is " + gameScore, width / 2 - 5, height / 2 + 20);
 	}
 }//End of draw function
 
@@ -132,14 +137,34 @@ function draw() {
 function keyPressed() {
 	//If statements to control the animation of the character when keys are pressed.
 	if (isFrozen == false) {
+		console.log("keyPressed: " + key);
+		console.log("keyPressed: " + keyCode);
 		if ((keyCode == 38 || keyCode == 32) && !isFalling) {
 			isJumping = true;
 		}
-
 		if (keyCode == 37) {
 			isLeft = true;
 		} else if (keyCode == 39) {
 			isRight = true;
+		}
+	}
+	if (waitForInput) {
+		if (keyCode == 89 || keyCode == 13) {
+			fill(255);
+			stroke(0);
+			text("You bought a life! Press any key to continue.", width / 2, height / 2 + 30);
+			lives++;
+			coinsQuantity -=3;
+			waitingForInput = false;
+		} else if (keyCode == 78 || keyCode == 27) {
+			fill(255);
+			stroke(0);
+			text("You chose not to buy a life. Press any key to continue.", width / 2, height / 2 + 30);
+			waitingForInput = false;
+		} else {
+			fill(255);
+			stroke(0);
+			text("Invalid input! Please press Y or N.", width / 2, height / 2 + 30);
 		}
 	}
 }
@@ -156,7 +181,6 @@ function keyReleased() {
 }
 
 //Background functions:
-
 function drawGround() {
 	noStroke();
 	fill(0, 155, 0);
@@ -315,7 +339,7 @@ function Enemy(x, y, range) {
 
 	this.checkContact = function (gc_x, gc_y) {
 		let d = dist(gc_x, gc_y, this.currentX, this.y);
-		if (d < 80) {
+		if (d < 60) {
 			return true;
 		}
 		return false;
@@ -325,7 +349,7 @@ function Enemy(x, y, range) {
 function drawEnemies() {
 	for (let i = 0; i < enemies.length; i++) {
 		enemies[i].draw();
-		let isContact = enemies[i].checkContact(gameChar_world_x + gameChar_width, gameChar_y + gameChar_width)
+		let isContact = enemies[i].checkContact(gameChar_world_x + gameChar_width, gameChar_y)
 		if (isContact) {
 			checkPlayerDie();
 		}
@@ -333,10 +357,16 @@ function drawEnemies() {
 }
 
 //Game status:
+function drawLevel(currentlevel) {
+	fill(255);
+	noStroke();
+	text("Level:" + (currentlevel + 1), 960, 20)
+}
+
 function drawScoreTable(score) {
 	fill(255);
 	noStroke();
-	text("Score:" + score, 20, 20)
+	text("Coins:" + coinsQuantity, 20, 20)
 }
 
 function drawlife(lives) {
@@ -352,6 +382,7 @@ function checkCollectable(t_collectable) {
 	if (dist(gameChar_x + 40, gameChar_y - 50, t_collectable.x_pos + cameraPosX, t_collectable.y_pos) < t_collectable.size) {
 		t_collectable.isFound = true;
 		gameScore += 1;
+		coinsQuantity += 1;
 		playRandomSound(collectSounds)
 	}
 }
@@ -371,9 +402,11 @@ function checkCanyon(t_canyon) {
 function checkFlagpole() {
 	if (!isTransparent) {
 		let d = abs(gameChar_world_x - flagpole.x_pos)
-		if (d <= 55) {
+		if (d <= 50) {
 			flagpole.isReached = true;
 			isFrozen = true
+			currentlevel++;
+			completeLevel();
 			if (!hascompleteSoundPlayed) {
 				completeSound.play();
 				hascompleteSoundPlayed = true;
@@ -439,6 +472,17 @@ function playRandomSound(sounds) {
 	sounds[randomIndex].play();
 }
 
+function completeLevel() {
+	if (gameScore >= 3) {
+		fill(255);
+		stroke(0)
+		text("Would you like to buy a life for " + 3 + "coins? Y/N", width / 2, height / 2);
+		waitForInput = true;
+	}
+	else {
+		startLevel();
+	}
+}
 //Start of each game level
 function startLevel(currentlevel) {
 	startGame(currentlevel);
@@ -453,11 +497,13 @@ function startGame(currentlevel) {
 	gameChar_width = 40;
 	fallingSpeed = 4;
 	isDead = false;
-	isTransparent = true;
+	isTransparent = false;//This is a variable for game testing, when it is true, the character is immortal
 	//Character set to default
 	isLeft, isRight, isFalling, isPlummeting, isJumping = false;
 	jumpHeight = 100;
 	isFrozen = false;
+	//Player status
+	waitForInput = false;
 	//Game Camera
 	cameraPosX = 0;
 	hascompleteSoundPlayed = false;
@@ -485,13 +531,13 @@ function startGame(currentlevel) {
 	//Plantforms in array
 	plantforms = [];
 	canyons.forEach((canyon) => {
-		plantforms.push(creatPlantforms(canyon.x_pos  + 35, canyon.y_pos - 125, canyon.width - 70))
+		plantforms.push(creatPlantforms(canyon.x_pos + 35, canyon.y_pos - 125, canyon.width - 70))
 	})
 
 	//Enemies
 	enemies = [];
 	canyons.forEach((canyon) => {
-		enemies.push(new Enemy(canyon.x_pos - cameraPosX - canyon.width, floorPos_y - 30, canyon.x_pos - cameraPosX + canyon.width))
+		enemies.push(new Enemy(canyon.x_pos - cameraPosX - canyon.width, floorPos_y - 30, canyon.width * 3))
 	})
 
 	//Flagpole
