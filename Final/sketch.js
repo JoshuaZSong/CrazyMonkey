@@ -12,13 +12,13 @@ let mountains, canyons, trees_x, clouds, plantforms;
 //Collectable
 let collectables;
 //Character
-let gameChar_x, gameChar_y, gameChar_width, gameChar_world_x, fallingSpeed, lives, jumpHeight, isDead;
+let gameChar_x, gameChar_y, gameChar_width, gameChar_world_x, fallingSpeed, lives, jumpHeight, isDead, isTransparent;
 //Charactoer status
 let isLeft, isRight, isFalling, isPlummeting, isJumping, isFrozen;
 //enemy
 let enemies;
 //Game status 
-let currentlevel,cameraPosX, gameScore, flagpole;
+let currentlevel, cameraPosX, gameScore, flagpole;
 //Game sound
 let jumpSound, completeSound, hascompleteSoundPlayed, collectSound1, collectSound2, collectSounds;
 let failSound1, failSound2, failSounds, gameOverSound, hasgoSoundPlayed;
@@ -326,7 +326,6 @@ function drawEnemies() {
 	for (let i = 0; i < enemies.length; i++) {
 		enemies[i].draw();
 		let isContact = enemies[i].checkContact(gameChar_world_x + gameChar_width, gameChar_y + gameChar_width)
-
 		if (isContact) {
 			checkPlayerDie();
 		}
@@ -358,52 +357,60 @@ function checkCollectable(t_collectable) {
 }
 
 function checkCanyon(t_canyon) {
-	//falling into the canyon
-	if (gameChar_x + 35 >= t_canyon.x_pos + cameraPosX
-		&& gameChar_x + 40 <= t_canyon.x_pos + t_canyon.width + cameraPosX) {
-		if (!isFalling) {
-			gameChar_y += 4;
+	if (!isTransparent) {
+		//falling into the canyon
+		if (gameChar_x + 35 >= t_canyon.x_pos + cameraPosX
+			&& gameChar_x + 40 <= t_canyon.x_pos + t_canyon.width + cameraPosX) {
+			if (!isFalling) {
+				gameChar_y += 4;
+			}
 		}
 	}
 }
 
 function checkFlagpole() {
-	let d = abs(gameChar_world_x - flagpole.x_pos)
-	if (d <= 55) {
-		flagpole.isReached = true;
-		isFrozen = true
-		if (!hascompleteSoundPlayed) {
-			completeSound.play();
-			hascompleteSoundPlayed = true;
+	if (!isTransparent) {
+		let d = abs(gameChar_world_x - flagpole.x_pos)
+		if (d <= 55) {
+			flagpole.isReached = true;
+			isFrozen = true
+			if (!hascompleteSoundPlayed) {
+				completeSound.play();
+				hascompleteSoundPlayed = true;
+			}
+			if (!completeSound.isPlaying() && hascompleteSoundPlayed) {
+				completeSound.stop();
+			}
+		} else {
+			flagpole.isReached = false;
 		}
-		if (!completeSound.isPlaying() && hascompleteSoundPlayed) {
-			completeSound.stop();
-		}
-	} else {
-		flagpole.isReached = false;
 	}
+
 }
 
 function checkPlayerDie() {
 	console.log('checkPlayerDie')
-	if (lives > 1) {
-		lives--;
-		startGame();
-		playRandomSound(failSounds);
-		console.log('failSounds')
-	} else {
-		lives--;
-		isDead = true;
-		isFrozen = true;
-		console.log('Over')
-		if (!hasgoSoundPlayed) {
-			gameOverSound.play();
-			hasgoSoundPlayed = true;
-		}
-		if (!gameOverSound.isPlaying() && hasgoSoundPlayed) {
-			gameOverSound.stop();
+	if (!isTransparent) {
+		if (lives > 1) {
+			lives--;
+			startGame();
+			playRandomSound(failSounds);
+			console.log('failSounds')
+		} else {
+			lives--;
+			isDead = true;
+			isFrozen = true;
+			console.log('Over')
+			if (!hasgoSoundPlayed) {
+				gameOverSound.play();
+				hasgoSoundPlayed = true;
+			}
+			if (!gameOverSound.isPlaying() && hasgoSoundPlayed) {
+				gameOverSound.stop();
+			}
 		}
 	}
+
 }
 
 function setUpSoundFiles() {
@@ -433,7 +440,7 @@ function playRandomSound(sounds) {
 }
 
 //Start of each game level
-function startLevel(currentlevel){
+function startLevel(currentlevel) {
 	startGame(currentlevel);
 }
 
@@ -445,6 +452,8 @@ function startGame(currentlevel) {
 	gameChar_y = floorPos_y;
 	gameChar_width = 40;
 	fallingSpeed = 4;
+	isDead = false;
+	isTransparent = true;
 	//Character set to default
 	isLeft, isRight, isFalling, isPlummeting, isJumping = false;
 	jumpHeight = 100;
@@ -476,15 +485,14 @@ function startGame(currentlevel) {
 	//Plantforms in array
 	plantforms = [];
 	canyons.forEach((canyon) => {
-		plantforms.push(creatPlantforms(canyon.x_pos + 35, canyon.y_pos - 125, canyon.width - 70))
+		plantforms.push(creatPlantforms(canyon.x_pos  + 35, canyon.y_pos - 125, canyon.width - 70))
 	})
 
 	//Enemies
 	enemies = [];
 	canyons.forEach((canyon) => {
-		enemies.push(new Enemy(canyon.x_pos - canyon.width, floorPos_y - 30, canyon.x_pos + canyon.width))
+		enemies.push(new Enemy(canyon.x_pos - cameraPosX - canyon.width, floorPos_y - 30, canyon.x_pos - cameraPosX + canyon.width))
 	})
-
 
 	//Flagpole
 	flagpole = {
