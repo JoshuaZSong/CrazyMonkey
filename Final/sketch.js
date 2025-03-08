@@ -75,6 +75,7 @@ function draw() {
 	drawPlatform();
 	drawFlagpole();
 	drawCollectable()
+	drawEnemies();
 	pop();
 
 	//The game character
@@ -298,7 +299,7 @@ function Enemy(x, y, range) {
 	this.inc = 1
 
 	this.update = function () {
-		currentX += this.inc
+		this.currentX += this.inc
 		if (this.currentX >= this.x + this.range) {
 			this.inc = -1;
 		} else if (this.currentX < this.x) {
@@ -309,14 +310,44 @@ function Enemy(x, y, range) {
 	this.draw = function () {
 		this.update();
 		fill(0);
-		ellipse(this.x, this.y, random(), random())
+		ellipse(this.currentX, this.y, random(35, 40), random(35, 40))
 
 	}
 
-	this.checkContact = function () {
+	this.checkContact = function (gc_x, gc_y) {
+		let d = dist(gc_x, gc_y, this.currentX, this.y);
+		if (d < 40) {
+			return true;
+		}
+		return false;
+	}
+}
+
+function drawEnemies() {
+	for (let i = 0; i < enemies.length; i++) {
+		enemies[i].draw();
+
+		let isContact = enemies[i].checkContact(gameChar_world_x, gameChar_y)
+		if (isContact) {
+			if (lives > 1) {
+				lives--;
+				startGame();
+				playRandomSound(failSounds);
+			} else {
+				lives--;
+				text("Game Over!", width / 2, height / 2);
+				isFrozen = true;
+				if (!hasgoSoundPlayed) {
+					gameOverSound.play();
+					hasgoSoundPlayed = true;
+				}
+				if (!gameOverSound.isPlaying() && hasgoSoundPlayed) {
+					gameOverSound.stop();
+				}
+			}
+		}
 
 	}
-
 }
 
 //Game status:
@@ -440,7 +471,7 @@ function startGame() {
 	//Enemies
 	enemies = [];
 	canyons.forEach((canyon) => {
-		enemies.push(new Enemy(canyon.x_pos, floorPos_y - 10, canyon.x_pos + 1050))
+		enemies.push(new Enemy(canyon.x_pos - canyon.width, floorPos_y - 30, canyon.x_pos + canyon.width))
 	})
 
 
