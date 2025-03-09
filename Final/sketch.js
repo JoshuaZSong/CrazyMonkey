@@ -155,11 +155,8 @@ function keyPressed() {
 			lives++;
 			waitingForInput = false;
 		} else if (keyCode == 78 || keyCode == 27) {
+			startLevel(currentlevel);
 			waitingForInput = false;
-		} else {
-			fill(255);
-			stroke(0);
-			text("Invalid input! Please press Y or N.", width / 2, height / 2 + 30);
 		}
 	}
 }
@@ -474,18 +471,19 @@ function completeLevel() {
 		waitingForInput = true;
 	}
 	else {
+		currentlevel += 1;
 		startLevel(currentlevel);
 	}
 }
 //Start of each game level
-function startLevel(currentlevel) {
-	currentlevel++;
-	startGame(currentlevel);
+function startLevel(level) {
+	console.log(level)
+	startGame(level);
 }
 
 //Start/replay of the game
-function startGame(currentlevel) {
-	console.log(currentlevel)
+function startGame(level) {
+	console.log(level)
 	floorPos_x = 0
 	//Character status
 	gameChar_x = width / 2;
