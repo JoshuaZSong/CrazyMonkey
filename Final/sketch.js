@@ -2,10 +2,8 @@
 Author: Zihao Song
 The Game Project
 Final
-Multiple interactables
 */
 
-//import { drawGameChar } from './character.js';
 //Background mountain Canyon Trees plamtforms
 let floorPos_y, floorPos_x;
 let mountains, canyons, trees_x, clouds, plantforms;
@@ -33,13 +31,9 @@ function setup() {
 	createCanvas(1024, 576);
 	floorPos_y = height * 3 / 4;
 	gameScore = 0;
-	coinsQuantity = 3;
+	coinsQuantity = 0;
 	lives = 3;
 	currentlevel = 0;
-
-	collectables = [{ x_pos: 100, y_pos: 350, size: 50, isFound: false },
-	{ x_pos: 950, y_pos: 350, size: 50, isFound: false },
-	{ x_pos: 1150, y_pos: 350, size: 50, isFound: false }]
 
 	startLevel(currentlevel);
 }
@@ -73,8 +67,6 @@ function draw() {
 	drawScoreTable(gameScore);
 	drawlife(lives)
 	checkFlagpole();
-
-
 
 	//The opposite position change(opposite to the background)
 	if (isFrozen == false) {
@@ -119,26 +111,27 @@ function draw() {
 		}
 	}
 
+	//Camera moving
 	gameChar_world_x = gameChar_x - cameraPosX;
 
+	//Jump sound
 	if (isJumping) {
 		jumpSound.play();
 	}
 
+	//Game over text when char is dead
 	if (isDead) {
 		fill(255);
 		stroke(0)
 		text("Game Over!", width / 2, height / 2);
 		text("Your score is " + gameScore, width / 2 - 5, height / 2 + 20);
 	}
-}//End of draw function
+}
 
 
 function keyPressed() {
 	//If statements to control the animation of the character when keys are pressed.
 	if (isFrozen == false) {
-		console.log("keyPressed: " + key);
-		console.log("keyPressed: " + keyCode);
 		if ((keyCode == 38 || keyCode == 32) && !isFalling) {
 			isJumping = true;
 		}
@@ -149,12 +142,14 @@ function keyPressed() {
 		}
 	}
 
+	//waiting for player to choose buy or not to buy a live for 3 coins
 	if (waitingForInput) {
 		if (keyCode == 89 || keyCode == 13) {
 			coinsQuantity -= 3;
 			lives++;
 			waitingForInput = false;
 		} else if (keyCode == 78 || keyCode == 27) {
+			currentlevel += 1;
 			startLevel(currentlevel);
 			waitingForInput = false;
 		}
@@ -276,8 +271,6 @@ function drawCollectable() {
 			checkCollectable(collectables[i]);
 		}
 	}
-
-
 }
 
 function drawFlagpole() {
@@ -317,7 +310,6 @@ function Enemy(x, y, range) {
 				this.inc = 1;
 			}
 		}
-
 	}
 
 	this.draw = function () {
@@ -379,6 +371,24 @@ function checkCollectable(t_collectable) {
 	}
 }
 
+class Canyon {
+	constructor(level, index) {
+		this.quantity = level + 3;
+		this.x_pos = 200 + index * 600
+		this.y_pos = floorPos_y;
+		this.width = 150 + level * 10
+	}
+}
+
+class Collectable {
+	constructor(level) {
+		this.x_pos = random(0, 2000 + level * 200)
+		this.y_pos = 350;
+		this.size = 50
+		this.isFound = false;
+	}
+}
+
 function checkCanyon(t_canyon) {
 	if (!isTransparent) {
 		//falling into the canyon
@@ -392,39 +402,33 @@ function checkCanyon(t_canyon) {
 }
 
 function checkFlagpole() {
-	if (!isTransparent) {
-		let d = abs(gameChar_world_x - flagpole.x_pos)
-		if (d <= 50) {
-			flagpole.isReached = true;
-			isFrozen = true
-			if (!hascompleteSoundPlayed) {
-				completeSound.play();
-				hascompleteSoundPlayed = true;
-			}
-			if (!completeSound.isPlaying() && hascompleteSoundPlayed) {
-				completeSound.stop();
-			}
-			completeLevel();
-		} else {
-			flagpole.isReached = false;
+	let d = abs(gameChar_world_x - flagpole.x_pos)
+	if (d <= 50) {
+		flagpole.isReached = true;
+		isFrozen = true
+		if (!hascompleteSoundPlayed) {
+			completeSound.play();
+			hascompleteSoundPlayed = true;
 		}
+		if (!completeSound.isPlaying() && hascompleteSoundPlayed) {
+			completeSound.stop();
+		}
+		completeLevel();
+	} else {
+		flagpole.isReached = false;
 	}
-
 }
 
 function checkPlayerDie() {
-	console.log('checkPlayerDie')
 	if (!isTransparent) {
 		if (lives > 1) {
 			lives--;
-			startGame();
+			startGame(currentlevel);
 			playRandomSound(failSounds);
-			console.log('failSounds')
 		} else {
 			lives--;
 			isDead = true;
 			isFrozen = true;
-			console.log('Over')
 			if (!hasgoSoundPlayed) {
 				gameOverSound.play();
 				hasgoSoundPlayed = true;
@@ -434,7 +438,6 @@ function checkPlayerDie() {
 			}
 		}
 	}
-
 }
 
 function setUpSoundFiles() {
@@ -475,15 +478,19 @@ function completeLevel() {
 		startLevel(currentlevel);
 	}
 }
-//Start of each game level
+
+//Start level
 function startLevel(level) {
-	console.log(level)
-	startGame(level);
+	collectables = [];
+	for (let i = 0; i < 3; i++) {
+		const collectable = new Collectable(level);
+		collectables.push(collectable)
+	}
+	startGame(level)
 }
 
 //Start/replay of the game
 function startGame(level) {
-	console.log(level)
 	floorPos_x = 0
 	//Character status
 	gameChar_x = width / 2;
@@ -494,7 +501,7 @@ function startGame(level) {
 	isTransparent = false;//This is a variable for game testing, when it is true, the character is immortal
 	//Character set to default
 	isLeft, isRight, isFalling, isPlummeting, isJumping = false;
-	jumpHeight = 500;
+	jumpHeight = 110;
 	isFrozen = false;
 	//Player status
 	waitingForInput = false;
@@ -510,9 +517,11 @@ function startGame(level) {
 	{ x_pos: 500, y_pos: 250 }];
 
 	//Canyons in array
-	canyons = [{ x_pos: 200, y_pos: floorPos_y, width: 150 },
-	{ x_pos: 900, y_pos: floorPos_y, width: 150 },
-	{ x_pos: 1500, y_pos: floorPos_y, width: 150 }]
+	canyons = [];
+	for (let i = 0; i < level + 3; i++) {
+		const canyon = new Canyon(level, i);
+		canyons.push(canyon)
+	}
 
 	//Trees in array
 	trees_x = [100, 300, 700, 100, 1400];
@@ -537,11 +546,11 @@ function startGame(level) {
 	//Flagpole
 	flagpole = {
 		isReached: false,
-		x_pos: 2000
+		x_pos: 2000 + level * 200
 	}
 }
 
-
+//Draw game Character lots of repeating, will be rewrite in the future
 function drawGameChar() {
 	if (isLeft && (isFalling || isPlummeting)) {//the character jumping and facing the left side
 		//Body
